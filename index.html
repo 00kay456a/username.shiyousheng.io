@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#FBF6F0" />
+<title>测测你的理想恋爱剧本 · 一场关于心动的私人放映</title>
+<style>
+  :root{
+    --cream:#FBF6F0;
+    --paper:#FFFDF9;
+    --blush:#F6E0E3;
+    --rose:#E7B4BC;
+    --wine:#7B2639;
+    --wine-soft:#A65063;
+    --gold:#C7A267;
+    --gold-light:#E7D3AE;
+    --ink:#3B2D31;
+    --muted:#8C7C80;
+    --line:rgba(123,38,57,.14);
+    --shadow:0 22px 60px rgba(90,45,55,.13);
+    --serif:"Songti SC","Noto Serif CJK SC","Source Han Serif SC","STSong",Georgia,serif;
+    --sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    min-height:100vh;
+    font-family:var(--sans);
+    color:var(--ink);
+    background:
+      radial-gradient(1100px 620px at 12% -8%, rgba(231,180,188,.36), transparent 62%),
+      radial-gradient(900px 620px at 92% 6%, rgba(231,211,174,.42), transparent 60%),
+      radial-gradient(800px 700px at 50% 108%, rgba(166,80,99,.10), transparent 65%),
+      var(--cream);
+    overflow-x:hidden;
+  }
+  .grain{
+    position:fixed;inset:0;z-index:9;pointer-events:none;opacity:.16;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E");
+  }
+  .stars{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .star{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:.45;animation:twinkle 4s ease-in-out infinite}
+  .star::after{content:"";position:absolute;left:-4px;top:-4px;width:12px;height:12px;background:radial-gradient(circle,rgba(199,162,103,.5),transparent 70%);border-radius:50%}
+  @keyframes twinkle{0%,100%{opacity:.18;transform:scale(.8)}50%{opacity:.75;transform:scale(1.25)}}
+  #app{position:relative;z-index:2;max-width:960px;margin:0 auto;padding:34px 20px 70px}
+  .view{display:none;animation:viewIn .6s cubic-bezier(.2,.8,.2,1) both}
+  .view.active{display:block}
+  @keyframes viewIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+  /* ---------- 首页 ---------- */
+  .home-wrap{min-height:calc(100vh - 110px);display:flex;align-items:center;justify-content:center}
+  .hero{position:relative;width:100%;max-width:770px;margin:0 auto;text-align:center;padding:56px 30px 50px;
+    background:linear-gradient(160deg,rgba(255,253,249,.92),rgba(255,248,246,.72));
+    border:1px solid rgba(199,162,103,.42);border-radius:6px;box-shadow:var(--shadow)}
+  .hero::before,.hero::after{content:"";position:absolute;width:22px;height:22px;border:1px solid var(--gold);opacity:.7}
+  .hero::before{left:10px;top:10px;border-right:0;border-bottom:0}
+  .hero::after{right:10px;bottom:10px;border-left:0;border-top:0}
+  .moon{width:74px;height:74px;margin:0 auto 18px;display:block;filter:drop-shadow(0 6px 14px rgba(199,162,103,.35));animation:float 6s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  .eyebrow{font-size:11px;letter-spacing:.34em;color:var(--wine-soft);text-transform:uppercase;font-weight:600}
+  .hero h1{font-family:var(--serif);font-size:clamp(38px,7.2vw,66px);line-height:1.22;letter-spacing:.06em;margin:16px 0 10px;color:var(--wine);font-weight:600}
+  .hero h1 span{position:relative;display:inline-block}
+  .hero h1 span::after{content:"";position:absolute;left:4%;right:4%;bottom:-6px;height:8px;border-radius:50%;background:rgba(231,180,188,.45);z-index:-1;transform:rotate(-1.2deg)}
+  .subtitle{font-family:var(--serif);font-size:15px;letter-spacing:.22em;color:var(--gold);margin-bottom:26px}
+  .divider{display:flex;align-items:center;justify-content:center;gap:12px;margin:0 auto 24px;max-width:360px}
+  .divider::before,.divider::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--gold-light),transparent)}
+  .divider i{width:6px;height:6px;background:var(--rose);transform:rotate(45deg)}
+  .hero p.intro{font-size:14px;line-height:2.05;color:#65565A;max-width:520px;margin:0 auto 14px}
+  .hero p.intro b{color:var(--wine);font-weight:600}
+  .meta-row{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:24px 0 30px}
+  .meta-pill{font-size:11px;letter-spacing:.08em;padding:7px 14px;border:1px solid rgba(199,162,103,.45);border-radius:999px;color:var(--wine-soft);background:rgba(255,255,255,.6)}
+  .btn{
+    position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    border:0;cursor:pointer;font-family:var(--sans);font-size:14px;letter-spacing:.12em;font-weight:600;
+    padding:15px 34px;border-radius:999px;color:#fff;background:linear-gradient(135deg,var(--wine),#9A3A50);
+    box-shadow:0 12px 28px rgba(123,38,57,.24);transition:transform .25s,box-shadow .25s,opacity .25s;overflow:hidden}
+  .btn::after{content:"";position:absolute;top:0;left:-120%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);transform:skewX(-20deg);transition:left .7s}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(123,38,57,.3)}
+  .btn:hover::after{left:130%}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:transparent;color:var(--wine);border:1px solid rgba(123,38,57,.3);box-shadow:none}
+  .btn.ghost:hover{background:rgba(123,38,57,.05)}
+  .btn.small{padding:11px 22px;font-size:12px}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .btn-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+  .tiny-note{font-size:11px;color:var(--muted);margin-top:18px;letter-spacing:.06em}
+
+  /* ---------- 答题 ---------- */
+  .quiz-top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}
+  .back-btn{border:0;background:transparent;color:var(--wine-soft);font-size:12px;letter-spacing:.1em;cursor:pointer;padding:8px 4px;display:flex;align-items:center;gap:6px;transition:opacity .2s}
+  .back-btn:disabled{opacity:.25;cursor:not-allowed}
+  .back-btn:hover:not(:disabled){color:var(--wine)}
+  .counter{font-family:var(--serif);font-size:12px;color:var(--wine-soft);letter-spacing:.14em}
+  .counter b{font-size:22px;color:var(--wine);font-weight:600}
+  .progress-track{height:5px;border-radius:999px;background:rgba(123,38,57,.10);overflow:hidden;position:relative}
+  .progress-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--rose),var(--wine),var(--gold));transition:width .45s cubic-bezier(.2,.8,.2,1)}
+  .ticks{display:flex;justify-content:space-between;margin-top:7px;gap:1px}
+  .ticks i{flex:1;height:3px;border-radius:2px;background:rgba(123,38,57,.09);transition:background .3s}
+  .ticks i.done{background:rgba(199,162,103,.65)}
+  .qcard{
+    position:relative;margin-top:24px;padding:40px 42px 34px;
+    background:linear-gradient(155deg,rgba(255,253,249,.96),rgba(255,249,247,.85));
+    border:1px solid rgba(199,162,103,.34);border-radius:8px;box-shadow:var(--shadow);
+    transition:opacity .22s,transform .22s}
+  .qcard::before{content:"";position:absolute;left:0;top:22px;bottom:22px;width:3px;background:linear-gradient(var(--rose),var(--wine));border-radius:2px}
+  .qcard.out{opacity:0;transform:translateY(14px) scale(.985)}
+  .qcard.in{animation:cardIn .48s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes cardIn{from{opacity:0;transform:translateY(20px) scale(.985)}to{opacity:1;transform:none}}
+  .scene{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.16em;color:var(--wine-soft);background:rgba(246,224,227,.6);padding:7px 13px;border-radius:999px}
+  .scene::before{content:"✦";color:var(--gold)}
+  .qcard h2{font-family:var(--serif);font-size:clamp(20px,3.4vw,28px);line-height:1.7;letter-spacing:.03em;margin:22px 0 26px;color:#3A2C30;font-weight:600}
+  .options{display:grid;gap:12px}
+  .opt{
+    display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+    padding:15px 18px;border-radius:6px;border:1px solid rgba(123,38,57,.12);
+    background:rgba(255,255,255,.72);color:#4B3A3F;font-size:14px;line-height:1.65;
+    font-family:var(--sans);transition:all .22s ease}
+  .opt:hover{border-color:rgba(123,38,57,.42);background:#fff;transform:translateX(5px);box-shadow:0 8px 20px rgba(123,38,57,.07)}
+  .opt .key{flex:none;width:27px;height:27px;border:1px solid rgba(199,162,103,.7);border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-size:13px;color:var(--wine)}
+  .opt .txt{flex:1}
+  .opt .arrow{opacity:0;color:var(--gold);transition:opacity .2s,transform .2s;font-size:16px}
+  .opt:hover .arrow{opacity:1;transform:translateX(3px)}
+  .opt.selected{border-color:var(--wine);background:linear-gradient(100deg,rgba(246,224,227,.85),rgba(255,255,255,.9));box-shadow:0 10px 24px rgba(123,38,57,.12)}
+  .opt.selected .key{background:var(--wine);color:#fff;border-color:var(--wine)}
+  .qfoot{display:flex;justify-content:space-between;align-items:center;margin-top:22px;font-size:11px;color:var(--muted);letter-spacing:.08em;gap:10px;flex-wrap:wrap}
+  .qfoot kbd{border:1px solid rgba(123,38,57,.2);border-bottom-width:2px;border-radius:4px;padding:1px 6px;font-family:var(--sans);font-size:10px;color:var(--wine-soft);background:rgba(255,255,255,.7)}
+
+  /* ---------- 结果 ---------- */
+  .result-cover{position:relative;text-align:center;padding:44px 26px 38px;margin-bottom:22px;
+    background:linear-gradient(160deg,rgba(255,253,249,.95),rgba(250,238,238,.8));
+    border:1px solid rgba(199,162,103,.42);border-radius:8px;box-shadow:var(--shadow);overflow:hidden}
+  .result-cover::before{content:"";position:absolute;width:330px;height:330px;border-radius:50%;border:1px solid rgba(199,162,103,.25);right:-150px;top:-160px}
+  .result-cover::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;border:1px solid rgba(199,162,103,.18);left:-130px;bottom:-140px}
+  .cover-moon{width:42px;height:42px;margin:0 auto 12px;display:block}
+  .script-no{font-size:10px;letter-spacing:.35em;color:var(--gold);text-transform:uppercase}
+  .result-cover h1{font-family:var(--serif);font-size:clamp(34px,6.5vw,56px);color:var(--wine);letter-spacing:.1em;margin:14px 0 8px;line-height:1.25}
+  .tagline{font-family:var(--serif);font-size:15px;letter-spacing:.14em;color:var(--wine-soft);margin-bottom:22px}
+  .seal{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:96px;height:96px;border:1px solid var(--gold);border-radius:50%;background:rgba(255,255,255,.55);transform:rotate(-6deg)}
+  .seal b{font-family:var(--serif);font-size:25px;color:var(--wine);line-height:1}
+  .seal span{font-size:9px;letter-spacing:.14em;color:var(--gold);margin-top:5px}
+  .keywords{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+  .kw{font-size:11px;letter-spacing:.12em;padding:6px 13px;border-radius:999px;background:rgba(246,224,227,.65);color:var(--wine-soft);border:1px solid rgba(199,162,103,.3)}
+  .side-line{font-size:11px;color:var(--muted);margin-top:16px}
+  .side-line b{color:var(--wine-soft);font-weight:600}
+
+  .section-title{display:flex;align-items:center;gap:12px;margin:34px 0 16px}
+  .section-title span{font-family:var(--serif);font-size:12px;color:var(--gold);letter-spacing:.16em}
+  .section-title h3{font-family:var(--serif);font-size:19px;color:var(--wine);letter-spacing:.12em;margin:0;font-weight:600}
+  .section-title::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(199,162,103,.5),transparent)}
+  .dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .dim{padding:16px 18px;background:rgba(255,253,249,.82);border:1px solid var(--line);border-radius:6px}
+  .dim-head{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);letter-spacing:.06em;margin-bottom:9px}
+  .dim-head b{color:var(--wine);font-size:12px}
+  .dim-bar{height:6px;border-radius:999px;background:linear-gradient(90deg,rgba(231,180,188,.5),rgba(199,162,103,.3));position:relative}
+  .dim-bar i{position:absolute;top:-3px;width:12px;height:12px;border-radius:50%;background:var(--wine);border:2px solid #fff;box-shadow:0 2px 6px rgba(123,38,57,.28);transform:translateX(-50%);transition:left .8s cubic-bezier(.2,.8,.2,1)}
+  .dim-scale{display:flex;justify-content:space-between;font-size:10px;color:#A49397;margin-top:7px}
+  .profile-note{font-family:var(--serif);font-size:14px;line-height:2;color:#5C4C50;padding:18px 20px;margin-top:14px;background:rgba(246,224,227,.32);border-left:2px solid var(--rose);border-radius:0 6px 6px 0}
+
+  .info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .info{background:rgba(255,253,249,.86);border:1px solid var(--line);border-radius:6px;padding:20px 22px}
+  .info.wide{grid-column:1/-1}
+  .info h4{font-family:var(--serif);font-size:14px;letter-spacing:.14em;color:var(--wine);margin:0 0 10px;display:flex;align-items:center;gap:9px}
+  .info h4 em{font-style:normal;font-family:var(--serif);font-size:11px;color:var(--gold);border:1px solid rgba(199,162,103,.5);width:20px;height:20px;border-radius:50%;display:grid;place-items:center;flex:none}
+  .info p{font-size:13px;line-height:1.95;color:#5E4F53;margin:0}
+  .info .split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .info .split div{padding-left:12px;border-left:1px solid rgba(199,162,103,.35)}
+  .info .split strong{display:block;font-family:var(--serif);font-size:11px;letter-spacing:.1em;color:var(--gold);margin-bottom:5px}
+
+  .letter{position:relative;margin:16px 0 0;padding:34px 38px 32px;
+    background:linear-gradient(180deg,#FFFDF8,#FDF6F1);border:1px solid rgba(199,162,103,.38);border-radius:4px;
+    box-shadow:0 14px 34px rgba(90,45,55,.08)}
+  .letter::before{content:"";position:absolute;inset:8px;border:1px dashed rgba(199,162,103,.32);border-radius:2px;pointer-events:none}
+  .stamp{position:absolute;right:24px;top:22px;width:52px;height:60px;border:1px dashed rgba(123,38,57,.35);display:grid;place-items:center;text-align:center;font-family:var(--serif);font-size:9px;line-height:1.5;color:var(--wine-soft);transform:rotate(9deg);letter-spacing:.08em}
+  .letter p{font-family:var(--serif);font-size:14px;line-height:2.15;color:#4E3D42;margin:0 0 13px;text-indent:2em}
+  .letter p:last-child{margin-bottom:0}
+  .quote-box{margin-top:26px;text-align:center;padding:32px 20px;position:relative}
+  .quote-box::before{content:"“";position:absolute;left:50%;top:-6px;transform:translateX(-50%);font-family:var(--serif);font-size:64px;color:rgba(199,162,103,.4);line-height:1}
+  .quote-box p{font-family:var(--serif);font-size:clamp(18px,3.6vw,26px);color:var(--wine);letter-spacing:.1em;line-height:1.9;margin:0;position:relative}
+  .quote-box small{display:block;margin-top:14px;font-size:10px;letter-spacing:.3em;color:var(--gold)}
+
+  .result-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:36px;padding-top:26px;border-top:1px solid rgba(199,162,103,.28)}
+  .toast{position:fixed;left:50%;bottom:34px;transform:translate(-50%,20px);background:var(--wine);color:#fff;font-size:12px;letter-spacing:.08em;padding:11px 22px;border-radius:999px;opacity:0;pointer-events:none;transition:all .3s;z-index:50;box-shadow:0 10px 30px rgba(123,38,57,.3)}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  @media(max-width:680px){
+    #app{padding:18px 14px 56px}
+    .hero{padding:44px 20px 38px}
+    .hero h1{letter-spacing:.03em}
+    .qcard{padding:28px 22px 24px;margin-top:18px}
+    .qcard h2{margin:18px 0 22px}
+    .opt{padding:13px 14px;font-size:13px;gap:11px}
+    .info-grid{grid-template-columns:1fr}
+    .info .split{grid-template-columns:1fr}
+    .letter{padding:28px 22px 26px}
+    .stamp{width:44px;height:51px;right:16px;top:16px;font-size:8px}
+    .letter p{font-size:13px;line-height:2.05}
+    .result-cover{padding:36px 18px 30px}
+    .btn{padding:14px 26px}
+  }
+  @media(max-width:400px){
+    .hero h1{font-size:35px}
+    .counter b{font-size:18px}
+    .qcard h2{font-size:19px}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="stars" id="stars"></div>
+
+<main id="app">
+
+  <!-- 首页 -->
+  <section class="view active" id="home">
+    <div class="home-wrap">
+      <div class="hero">
+        <svg class="moon" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+          <path d="M62 12a38 38 0 1 0 26 66A40 40 0 0 1 62 12Z" fill="#E7D3AE" stroke="#C7A267" stroke-width="1.5"/>
+          <path d="M74 30l2.2 5.8L82 38l-5.8 2.2L74 46l-2.2-5.8L66 38l5.8-2.2L74 30Z" fill="#C7A267"/>
+          <circle cx="54" cy="62" r="2" fill="#C7A267"/><circle cx="44" cy="48" r="1.4" fill="#C7A267"/>
+        </svg>
+        <div class="eyebrow">A PRIVATE SCREENING OF YOUR HEART</div>
+        <h1>测测你的<span>理想恋爱剧本</span></h1>
+        <div class="subtitle">四十个问题 · 一场关于心动的私人放映</div>
+        <div class="divider"><i></i></div>
+        <p class="intro">
+          你有没有想过，你的爱情或许早已写好了剧本？<br>
+          是雨夜便利店里的<b>一眼万年</b>，是多年后回望的<b>青梅竹马</b>，<br>
+          还是从一句"我看你不顺眼"开始的<b>欢喜冤家</b>？<br>
+          这不是一份偏好调查问卷，而是一次潜入日常细节的心动采样。
+        </p>
+        <div class="meta-row">
+          <span class="meta-pill">⏱ 约 5 分钟</span>
+          <span class="meta-pill">✦ 40 道情境题</span>
+          <span class="meta-pill">♡ 14 种专属剧本</span>
+          <span class="meta-pill">✉ 无需登录</span>
+        </div>
+        <button class="btn" id="startBtn">开始放映 &nbsp;→</button>
+        <div class="btn-row" id="continueRow" style="display:none">
+          <button class="btn ghost small" id="continueBtn">继续上次的放映</button>
+        </div>
+        <div class="tiny-note">凭第一直觉作答，结果会更像你 · 支持返回修改答案</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 答题 -->
+  <section class="view" id="quiz">
+    <div class="quiz-top">
+      <button class="back-btn" id="backBtn">← 上一题</button>
+      <div class="counter">第 <b id="curNum">1</b> / 40 题</div>
+      <div style="width:70px;text-align:right;font-size:11px;color:var(--muted)" id="percent">0%</div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="ticks" id="ticks"></div>
+
+    <div class="qcard" id="qcard">
+      <div class="scene" id="scene">初遇</div>
+      <h2 id="qtext"></h2>
+      <div class="options" id="options"></div>
+      <div class="qfoot">
+        <span>选择后自动进入下一题</span>
+        <span>按 <kbd>1</kbd>-<kbd>4</kbd> 快速选择 · <kbd>←</kbd> 返回</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 结果 -->
+  <section class="view" id="result">
+    <div id="resultContent"></div>
+    <div class="result-actions">
+      <button class="btn ghost small" id="againBtn">↺ 重新测试</button>
+      <button class="btn small" id="copyBtn">✉ 复制我的剧本</button>
+    </div>
+    <div class="tiny-note" style="text-align:center">长按或截图保存，分享给你的那个人或朋友圈 ✦</div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* ============ 维度定义 ============ */
+/* R 浪漫程度  E 情感表达  C 相处模式  H 心动方式  N 情感需求  P 恋爱节奏  B 关系观念 */
+const DIMS = [
+  {k:"R", name:"浪漫浓度", low:"脚踏实地", high:"浪漫星河"},
+  {k:"E", name:"表达温度", low:"含蓄内敛", high:"主动直球"},
+  {k:"C", name:"陪伴距离", low:"独立自由", high:"形影不离"},
+  {k:"H", name:"心动开关", low:"日久生情", high:"一眼万年"},
+  {k:"N", name:"情感需求", low:"安稳如常", high:"新鲜起伏"},
+  {k:"P", name:"恋爱节奏", low:"慢慢来", high:"趁热爱"},
+  {k:"B", name:"关系支点", low:"生活默契", high:"灵魂共振"}
+];
+
+/* ============ 40 道情境题 ============ */
+const QUESTIONS = [
+  {scene:"初遇 · 雨夜便利店", text:"雨下得很大，你和一个陌生人同时站在便利店屋檐下。你会——", options:[
+    {text:"把伞往对方那边倾一点，顺口说一句「一起走吗？」",w:{E:2,P:1}},
+    {text:"安静地并肩站着，等雨小一点，也等一句开场白",w:{E:-2,C:1}},
+    {text:"偷偷看了一眼对方的侧脸，心跳先乱了节拍",w:{H:2,R:1}},
+    {text:"掏出手机记下这一幕，觉得像老电影里的开场",w:{R:2,B:1}}
+  ]},
+  {scene:"初遇 · 朋友的局", text:"朋友组了一场热闹的聚会，角落里坐着个不太说话的人。你的注意力会——", options:[
+    {text:"被那份安静吸引，忍不住想走近听听他在想什么",w:{B:2,H:1}},
+    {text:"很快融入人群，热场、接话、把气氛点亮",w:{E:2,C:1}},
+    {text:"留意谁一直落单，顺手把那个人拉进聊天",w:{C:2,E:1}},
+    {text:"先观察一整晚，回家后只记住了一个人的眼神",w:{H:2,E:-1}}
+  ]},
+  {scene:"心动瞬间 · 微小的动作", text:"下面哪个不经意的瞬间，最让你心里「咯噔」一下？", options:[
+    {text:"过马路时，他不动声色地走到车来的一侧",w:{R:1,C:2}},
+    {text:"聊到一半忽然安静，他认真看着你等你把话说完",w:{B:2,R:1}},
+    {text:"他记得你上次随口提过的小偏好",w:{R:2,H:1}},
+    {text:"他笑着说「你刚才的样子，和平时不太一样」",w:{H:2,N:1}}
+  ]},
+  {scene:"心动瞬间 · 手机亮了", text:"深夜手机亮起，是那个人的消息。你第一反应是——", options:[
+    {text:"立刻点开，几乎秒回，还忍不住笑出声",w:{E:2,P:1}},
+    {text:"先看一眼，把手机扣过去，过几分钟再回",w:{E:-2,P:-1}},
+    {text:"点开后反复读三遍，才慢慢想好怎么回",w:{R:2,B:1}},
+    {text:"回一句俏皮话，把话题引到意想不到的地方",w:{N:2,E:1}}
+  ]},
+  {scene:"日常相处 · 周末", text:"难得的一个周末，你理想中的安排是——", options:[
+    {text:"两个人窝在家里做饭、看片，哪儿都不去",w:{C:2,N:-2}},
+    {text:"临时起意出门，走到哪算哪，越意外越好",w:{N:2,P:1}},
+    {text:"各忙各的，傍晚再一起吃顿好吃的",w:{C:-2,B:1}},
+    {text:"安排一场有仪式感的约会，每一点都精心准备",w:{R:2,C:1}}
+  ]},
+  {scene:"日常相处 · 沉默", text:"两个人坐在同一间屋子里，很久没人说话。你此刻的感觉更接近——", options:[
+    {text:"很舒服，沉默本身也是一种陪伴",w:{C:2,B:1}},
+    {text:"有点不安，总想找点话题把空白填上",w:{E:1,N:1}},
+    {text:"各自看书或刷手机，偶尔抬头交换一个眼神",w:{C:-2,B:1}},
+    {text:"会在心里偷偷编排一段剧情，觉得这一刻很美",w:{R:2,H:-1}}
+  ]},
+  {scene:"约会偏好 · 第一次", text:"如果是第一次正式约会，你更希望地点是——", options:[
+    {text:"灯光昏黄的小酒馆，有爵士乐和聊不完的话",w:{R:2,B:1}},
+    {text:"游乐园或livehouse，心跳加速才像恋爱",w:{N:2,H:1}},
+    {text:"安静的书店和一段长长的散步路",w:{B:2,N:-1}},
+    {text:"夜市、菜市场，边吃边逛，烟火气十足",w:{C:2,R:-1}}
+  ]},
+  {scene:"约会偏好 · 计划", text:"关于约会的安排，你更倾向——", options:[
+    {text:"提前做好详细计划，每一步都在掌控中",w:{P:-1,N:-2,R:1}},
+    {text:"只定一个集合点，剩下的交给运气",w:{N:2,P:1}},
+    {text:"大方向定好，细节留给两个人现场决定",w:{C:1,N:1}},
+    {text:"让对方安排就好，我负责惊喜和反馈",w:{E:-2,R:1}}
+  ]},
+  {scene:"情绪表达 · 想念", text:"当你很想念一个人的时候，你通常会——", options:[
+    {text:"直接告诉他：我在想你，就现在",w:{E:2,P:1}},
+    {text:"发一首歌或一张照片，什么解释都不写",w:{E:-1,R:2}},
+    {text:"把想说的话写在备忘录里，写完自己看看",w:{E:-2,B:1}},
+    {text:"假装随口问一句「你在干嘛」，其实等了一整天",w:{E:-1,H:1}}
+  ]},
+  {scene:"情绪表达 · 深夜", text:"某天夜里情绪很低落，你更希望对方——", options:[
+    {text:"什么也不问，只是静静地陪着",w:{C:2,E:-1}},
+    {text:"立刻打电话过来，听你把事情说完",w:{E:2,C:1}},
+    {text:"第二天带一份早餐出现，不说昨晚的事",w:{R:1,C:2}},
+    {text:"讲一个荒唐的笑话，把你从情绪里拽出来",w:{N:2,E:1}}
+  ]},
+  {scene:"矛盾处理 · 争执之后", text:"争执过后，两个人都在气头上。你更可能——", options:[
+    {text:"先冷静几个小时，再把问题一条条理清楚",w:{P:-2,E:-1,B:1}},
+    {text:"当场把话说透，哪怕声音大一点也不憋着",w:{E:2,P:2}},
+    {text:"先服软，给对方倒杯水，问题留到明天再说",w:{C:2,E:1}},
+    {text:"出门走走，等情绪过去再回来重新聊",w:{C:-1,B:2}}
+  ]},
+  {scene:"矛盾处理 · 道歉", text:"如果对方先道歉了，你心里最希望听到的是——", options:[
+    {text:"「我知道你为什么难过，是我没做好。」",w:{B:2,R:1}},
+    {text:"「别生气了，我带你去吃那家店。」",w:{C:2,R:-1}},
+    {text:"「我们重新来过，刚才那些都不算。」",w:{P:2,N:1}},
+    {text:"一句简短的「对不起」，然后沉默地抱住你",w:{E:-2,C:2}}
+  ]},
+  {scene:"浪漫幻想 · 惊喜", text:"你最想收到的惊喜是——", options:[
+    {text:"一封手写信，字里行间都是只有你们懂的细节",w:{R:2,B:2}},
+    {text:"说走就走的短途旅行，目的地保密",w:{N:2,P:2}},
+    {text:"他出现在你下班路口，手里拿着你爱喝的东西",w:{C:2,R:1}},
+    {text:"在很多人面前郑重地说出喜欢你",w:{E:2,N:1}}
+  ]},
+  {scene:"浪漫幻想 · 纪念日", text:"在一起一百天，你会怎么定义这个日子？", options:[
+    {text:"一定要有仪式：礼物、蜡烛、写满话的卡片",w:{R:2,C:1}},
+    {text:"和普通日子差不多，只是多说一句「又一百天了」",w:{R:-2,C:1}},
+    {text:"做一件从没做过的事，给关系添点新故事",w:{N:2,P:1}},
+    {text:"拍一张合照，存进那个从不删的相册",w:{C:2,R:1}}
+  ]},
+  {scene:"关系发展 · 确认", text:"暧昧了一段时间，你对「确认关系」这件事——", options:[
+    {text:"希望越快越好，模糊地带让人焦虑",w:{P:2,E:1,N:-1}},
+    {text:"再多相处一阵，等到彼此都确定再开口",w:{P:-2,B:1}},
+    {text:"顺其自然，某天醒来发现已经是了",w:{H:-1,P:-2,C:1}},
+    {text:"需要一个足够特别的时刻，让告白像结局",w:{R:2,H:1}}
+  ]},
+  {scene:"关系发展 · 介绍给朋友", text:"当你想认真对待一个人，你会——", options:[
+    {text:"大方带进朋友圈，让所有人知道他的存在",w:{E:2,C:1}},
+    {text:"先单独介绍给最亲密的一两个朋友",w:{C:1,E:-1}},
+    {text:"不急着公开，更想先把两个人相处明白",w:{C:-2,B:1}},
+    {text:"先观察朋友的意见，再决定要不要更近一步",w:{B:2,P:-1}}
+  ]},
+  {scene:"社交习惯 · 聚会", text:"在一场十几个人的聚会上，你通常——", options:[
+    {text:"是那个把气氛带起来的人，能量来自人群",w:{E:2,C:1,N:1}},
+    {text:"待在一两个投缘的人身边，其他的随缘",w:{C:-1,B:2}},
+    {text:"大部分时间安静观察，偶尔说一句很准的话",w:{E:-2,B:2}},
+    {text:"待一会儿就想走，回家才是真正的充电",w:{C:-2,N:-1}}
+  ]},
+  {scene:"社交习惯 · 朋友圈", text:"恋爱之后，你的社交动态会——", options:[
+    {text:"毫不避讳地分享，快乐就是要被看见",w:{E:2,R:1}},
+    {text:"偶尔发一张合影，配很简短的文字",w:{E:-1,R:1}},
+    {text:"几乎不提，想把这段关系留给自己",w:{E:-2,C:1}},
+    {text:"发一些只有他看得懂的暗号",w:{R:2,B:2}}
+  ]},
+  {scene:"亲密关系 · 依赖", text:"恋爱里最让你感到安心的时刻是——", options:[
+    {text:"知道对方随时都在，消息不会落空",w:{C:2,N:-1}},
+    {text:"即使一天没联系，也确信彼此还在",w:{C:-2,B:2}},
+    {text:"被明确地偏爱，哪怕只是开玩笑时也站我这边",w:{E:1,R:1}},
+    {text:"有各自的世界，却总在重要时刻重合",w:{C:-2,B:2}}
+  ]},
+  {scene:"亲密关系 · 空间", text:"当对方说「我今天想一个人待着」，你会——", options:[
+    {text:"完全理解，自己也正好有事做",w:{C:-2,B:1}},
+    {text:"嘴上答应，心里难免胡思乱想",w:{N:1,E:-1}},
+    {text:"问一句「需要我做什么吗」，然后安静离开",w:{C:1,E:1}},
+    {text:"给他空间，但会准备一点小惊喜等他回来",w:{R:2,C:-1}}
+  ]},
+  {scene:"生活细节 · 礼物", text:"收到礼物时，最让你珍惜的是——", options:[
+    {text:"贵不贵不重要，重要的是他记得我随口说过的话",w:{R:2,B:1}},
+    {text:"实用、贴心，正好是现在需要的东西",w:{R:-2,C:1}},
+    {text:"出乎意料、好玩，拆开那一刻有惊喜感",w:{N:2,H:1}},
+    {text:"他亲手做的，哪怕样子有点笨拙",w:{R:2,C:2}}
+  ]},
+  {scene:"生活细节 · 分工", text:"两个人一起生活，最理想的状态是——", options:[
+    {text:"事情说清楚、分明白，谁也不委屈",w:{B:2,R:-1}},
+    {text:"不用算计，谁方便谁做，自然就好",w:{C:2,B:1}},
+    {text:"他多做一点，我会用别的方式补回来",w:{E:-1,R:1}},
+    {text:"各有各的规则，互不干涉最轻松",w:{C:-2,B:-1}}
+  ]},
+  {scene:"未来想象 · 五年后", text:"想象五年后的生活，你画面的重点是——", options:[
+    {text:"一张固定的餐桌，一盏等他回来的灯",w:{C:2,N:-2,R:1}},
+    {text:"一起走过很多地方，家可以安在任何一处",w:{N:2,C:-1}},
+    {text:"各自成为更好的人，再回头看依然同行",w:{B:2,C:-1}},
+    {text:"仍有说不完的话，和很多没做完的计划",w:{P:1,R:1,N:1}}
+  ]},
+  {scene:"矛盾处理 · 被误解", text:"被对方误会了，而你觉得自己没错。你会——", options:[
+    {text:"先把事情经过讲清楚，讲不明白就写下来",w:{E:2,B:1}},
+    {text:"不解释，等他自己想明白",w:{E:-2,P:-2}},
+    {text:"先安抚情绪，等气氛好了再说事实",w:{C:2,E:1}},
+    {text:"反问一句「你为什么会这么想」，想听懂他",w:{B:2,R:1}}
+  ]},
+  {scene:"记忆 · 回家的路", text:"第一次约会结束，走在回家的路上。你会记得——", options:[
+    {text:"路灯把两个人的影子拉得很长，那一幕很美",w:{R:2,H:1}},
+    {text:"一路聊到路口，舍不得说再见",w:{E:2,C:1}},
+    {text:"到家后立刻发消息：我到家了，你呢",w:{C:2,E:1}},
+    {text:"他说的某句话，从此成了你心里的暗号",w:{B:2,R:1}}
+  ]},
+  {scene:"感官 · 心动的气味", text:"哪种感官记忆最容易把你拉回一段感情？", options:[
+    {text:"对方身上淡淡的洗衣液味道",w:{R:1,C:2}},
+    {text:"雨后在街边闻到咖啡香的那个夜晚",w:{R:2,H:1}},
+    {text:"他说话时低低的声调",w:{H:2,B:1}},
+    {text:"拥抱时心跳撞在一起的感觉",w:{H:2,P:1}}
+  ]},
+  {scene:"旅行 · 长途", text:"要一起进行一次长途旅行，你最期待的是——", options:[
+    {text:"行程排得满满的，想去的都去一遍",w:{N:2,P:1}},
+    {text:"找个安静的小城住下来，像当地人一样生活",w:{C:2,N:-2}},
+    {text:"在路上聊很多平时不会聊的事",w:{B:2,E:1}},
+    {text:"一起迷路，然后笑着找回来",w:{N:2,R:1}}
+  ]},
+  {scene:"数字时代 · 已读不回", text:"对方已读了消息却很久没回，你的心情是——", options:[
+    {text:"直接追问，「你是不是有什么想说的？」",w:{E:2,P:1}},
+    {text:"表面平静，心里已经想了八百种可能",w:{N:1,E:-2}},
+    {text:"等，相信他自有原因",w:{B:2,N:-2}},
+    {text:"转头去做自己的事，不把注意力全放在这",w:{C:-2,B:1}}
+  ]},
+  {scene:"朋友视角 · 自我形象", text:"如果让最好的朋友用一个词形容你恋爱中的样子，最有可能是——", options:[
+    {text:"「勇敢」——喜欢就去追，从不藏着",w:{E:2,P:2}},
+    {text:"「慢热」——开始很淡，后来越来越深",w:{P:-2,B:1}},
+    {text:"「浪漫」——会把普通日子过成节日",w:{R:2,C:1}},
+    {text:"「清醒」——很爱，但也保有自己",w:{C:-2,B:2}}
+  ]},
+  {scene:"亲密瞬间 · 拥抱", text:"争吵之后，对方忽然抱住你。你的反应是——", options:[
+    {text:"整个人放松下来，什么都不想再追究了",w:{C:2,E:-1}},
+    {text:"先僵一下，然后轻轻回抱住他",w:{E:-2,B:1}},
+    {text:"拍拍他的背，说「我们好好聊聊」",w:{E:2,B:1}},
+    {text:"眼眶有点热，但嘴上还是不肯服软",w:{E:-1,R:1}}
+  ]},
+  {scene:"天气 · 雨天邀约", text:"周末下起大雨，对方临时问「要不要见一面」，你会——", options:[
+    {text:"当然见，雨天的约会才最像电影",w:{R:2,P:1}},
+    {text:"更想待在家里，隔着窗聊一整晚",w:{C:2,N:-2}},
+    {text:"让他别出门，自己带吃的过去",w:{C:2,E:1}},
+    {text:"改天吧，天气影响了心情",w:{N:-1,R:-1}}
+  ]},
+  {scene:"共同语言 · 电影", text:"一部电影里，哪种情节最让你觉得「这就是爱情」？", options:[
+    {text:"隔着人群遥遥相望，什么都没说就懂了",w:{R:2,B:2}},
+    {text:"两个人拌嘴一路，最后在雨里并肩奔跑",w:{N:2,E:1}},
+    {text:"年复一年守着同一个约定，直到白发",w:{P:-2,C:2}},
+    {text:"在人生最糟糕的时刻，他恰好推门进来",w:{H:2,R:1}}
+  ]},
+  {scene:"心动方式 · 无法抗拒", text:"下面哪个时刻，会让你突然觉得「完了，是心动」？", options:[
+    {text:"第一次见面就聊到忘了时间",w:{H:2,P:1}},
+    {text:"相处半年后，某天突然发现已经离不开他",w:{H:-2,B:2}},
+    {text:"看他认真做一件与自己无关的事",w:{B:2,R:1}},
+    {text:"他当着所有人坚定地选择我",w:{E:1,R:2}}
+  ]},
+  {scene:"被照顾 · 生病时", text:"生病那天，你最希望对方做的事是——", options:[
+    {text:"立刻赶来，守在床边直到你睡着",w:{C:2,E:1}},
+    {text:"发一大串关心的消息，提醒你吃药",w:{E:1,C:-1}},
+    {text:"不打扰，但悄悄把药和粥放在门口",w:{E:-2,C:1,R:1}},
+    {text:"讲几个笑话，让生病这件事变得没那么糟",w:{N:2,R:1}}
+  ]},
+  {scene:"冲突 · 冷战", text:"你们已经冷战三天了，你打算——", options:[
+    {text:"先开口的人不丢脸，我真的不想失去他",w:{E:2,P:2}},
+    {text:"再等等，谁先认输谁就输了",w:{E:-2,P:-2,N:1}},
+    {text:"用行动破冰：发一张照片、点一份外卖",w:{R:2,E:1}},
+    {text:"找一个彼此都冷静的时机，认真谈一次",w:{B:2,P:-1}}
+  ]},
+  {scene:"关系公开 · 定义", text:"当别人问「你们算什么关系」，你更希望答案是——", options:[
+    {text:"「恋人啊，没什么好含糊的。」",w:{E:2,P:2}},
+    {text:"「很好的朋友，正在往更好的方向走。」",w:{P:-2,B:1}},
+    {text:"「你猜。」然后偷偷看向他",w:{E:-1,R:2}},
+    {text:"「说不清楚，但很确定。」",w:{B:2,R:1}}
+  ]},
+  {scene:"熟悉与陌生", text:"一个认识很久的人，忽然用陌生的眼神看你。你会——", options:[
+    {text:"心里一紧，第一次认真打量他",w:{H:1,N:1,B:1}},
+    {text:"觉得不适，更想退回原来的距离",w:{C:-2,N:-2}},
+    {text:"主动问：「你今天怎么了？」",w:{E:2,B:1}},
+    {text:"假装没察觉，但之后会留意很久",w:{E:-2,H:1}}
+  ]},
+  {scene:"信件 · 手写", text:"收到一封手写的信，字迹不算好看，但写了整整三页。你会——", options:[
+    {text:"反复读，然后把它夹进最常用的书里",w:{R:2,B:1}},
+    {text:"立刻回一封，哪怕写得同样笨拙",w:{E:2,R:1}},
+    {text:"拍照存下来，心里暖但不知怎么回应",w:{E:-2,R:1}},
+    {text:"觉得这种方式有点 old-fashioned，但喜欢",w:{R:1,N:1}}
+  ]},
+  {scene:"仪式感 · 日常", text:"你觉得「仪式感」最重要的是——", options:[
+    {text:"节日、礼物、精心准备的时刻，一样都不能少",w:{R:2,C:1}},
+    {text:"每天早上一个吻，晚上一句晚安",w:{C:2,R:-1}},
+    {text:"记住对方说过的话，并在某天兑现",w:{B:2,R:1}},
+    {text:"偶尔打破常规，让日常有新的记忆点",w:{N:2,P:1}}
+  ]},
+  {scene:"故事的开端 · 最终题", text:"如果要为你的爱情故事写一个开头，你希望第一句是——", options:[
+    {text:"「那天雨很大，我第一次看见他。」",w:{H:2,R:2}},
+    {text:"「我们认识太久了，久到谁都没想过会这样。」",w:{P:-2,B:2}},
+    {text:"「我本来没打算认真，是他让我改了主意。」",w:{N:2,P:2}},
+    {text:"「后来我才知道，那句随口的话是故事的开始。」",w:{B:2,R:1}}
+  ]}
+];
+
+/* ============ 14 种恋爱剧本 ============ */
+const SCRIPTS = [
+  {
+    name:"双向暗恋", tagline:"隔着一层窗纸，两个人都在等对方先伸手",
+    vec:[55,15,60,45,45,20,75], keywords:["克制","默契","未说出口"],
+    background:"你们认识很久，关系好到旁人都要羡慕。聊天记录翻不到底，彼此的喜好倒背如流，可那句「我喜欢你」像被谁按了暂停键。你怕说出来会连朋友都做不成，他大概也一样。于是这份喜欢被藏进日常的缝隙里，越藏越深，也越藏越亮。",
+    analysis:"你在感情里是典型的「观察型选手」。感受很浓，表达却很轻，习惯用细节而不是语言去确认一个人。你更相信长久相处沉淀出的判断，对突如其来的热烈反而有点警惕。你的心动常常发生在回头看的那一刻——原来那些不经意的瞬间，早就埋好了伏笔。",
+    attracted:"你容易被那种「懂分寸、有耐心、能把沉默也接住」的人吸引。他不需要很会说话，但要在你停顿的时候不急着填补空白；最好还能在你自己都没发现心意之前，就先一步看出你的犹豫。",
+    ideal:"他情绪稳定、心思细腻，不会用热烈逼你表态。他愿意把关系维持在一条安全的线附近，却总在关键时刻多靠近半步。你们之间有一种「不用说破也明白」的默契，这是你最珍惜的部分。",
+    strength:"你的克制让关系有呼吸感，也让对方有足够的时间看清你。你记细节的能力极强，别人随口说的话你都能放在心上，这种被郑重对待的感觉，一旦被感知就很难替代。",
+    weakness:"过度含蓄容易让对方误判你的态度，甚至错过最佳时机。你习惯把「他应该懂」当作默认值，可很多时候，对方需要的只是一个明确的信号。",
+    date:"傍晚的老城区散步，路灯刚亮，人不多。你们聊着无关紧要的事，走了一条又一条街，谁也不提回家。最后在一家快打烊的甜品店分食一块蛋糕——那一晚什么都没发生，却比很多告白都清晰。",
+    story:"第无数次，你们并肩坐在办公室的楼梯间。他把耳机摘下一只递过来，里面是你上周分享过的那首歌。你接过耳机时指尖碰到他的手背，两个人都顿了半秒，又若无其事地移开。\n\n第二天，他发了条消息：「昨晚那首歌，后半段歌词好像在说我们。」你想了很久，只回了一个「哈哈」。可那天晚上，你把那首歌单曲循环到凌晨。\n\n后来你才知道，他也一样。",
+    quote:"我们都没说的那句话，替我们在彼此心里住了好多年。"
+  },
+  {
+    name:"青梅竹马", tagline:"最熟悉的人，原来一直是最心动的人",
+    vec:[48,42,82,28,32,25,68], keywords:["长久","安稳","回望"],
+    background:"你们的认识早到没有起点。小时候抢过同一块糖，学生时代互相抄过作业，后来各自长大，联系时断时续。直到某个普通的周末，你在人群里听见他喊你的名字，忽然发现：这么多年过去，你早就习惯了有他在。",
+    analysis:"你对关系的信任建立在时间的长度上。你不急着被点燃，更在意一个人能否长期、稳定地出现。你的感情像慢炖的汤，火候到了味道自然出来。你很难被陌生人的热烈打动，却会被「他记得你所有重要日子」这种细节击中。",
+    attracted:"你容易被「熟悉感」吸引——相似的成长背景、共同的旧回忆、知道你糗事还愿意留下的人。你偏爱那些不需要重新解释自己的人，因为你已经把最真实的一面交给了时间。",
+    ideal:"他像一本你翻过很多遍的书，却总有意外的段落。他不追求轰轰烈烈，只在你回头时一直都在。你们之间的默契是长年累月磨出来的，不需要多少语言就能并肩走很远。",
+    strength:"你的耐心让关系有极高的稳定性。你不会轻易被新鲜感带走，也不会因为一时情绪否定一个人。你给出的承诺很重，一旦认定就很难改变。",
+    weakness:"太习惯熟悉，容易把对方的付出当成理所当然。你也可能因为「太熟了」而迟迟不往前走，直到某个外部事件才让你意识到自己的心意。",
+    date:"回到一起长大的那条街。吃当年最爱的那家小吃，坐在旧操场看台上看天色变暗，聊这些年错过的彼此。没有精心安排，却每一步都踩在回忆上。",
+    story:"搬家那天，你在旧抽屉里翻出一张泛黄的照片：小学毕业，你和他站在校门口，他少了一颗门牙，笑得眼睛都没了。\n\n你拍下来发给他，他很快回：「这张我也有。」然后又补了一句：「那时候我就觉得，以后大概还会和你一起走很远。」\n\n你盯着那行字看了很久。窗外是傍晚的蝉鸣，和二十年前一模一样。原来有些答案，早就写在起点。",
+    quote:"原来不是让你心动的人刚好出现，是他一直在，你才终于看见心动。"
+  },
+  {
+    name:"命中注定", tagline:"人海里偶然一撞，却像早已认识很久",
+    vec:[82,60,52,92,62,72,95], keywords:["偶然","共振","一见如故"],
+    background:"你们的相遇没有任何铺垫：一次错过的地铁、一场临时改签的航班、一个被点错的对话窗口。可聊起来的第一分钟你就愣住了——他说的那句话，正是你前一天写在日记里的句子。这种「说不清为什么，但就是对了」的感觉，你后来再没解释清楚过。",
+    analysis:"你对心动有非常敏锐的直觉，也很愿意相信命运的安排。你不排斥浪漫，甚至有点迷恋那些无法量化的巧合。你的情感表达直接而真诚，遇到想靠近的人不会绕路。对你来说，关系的开始不是权衡，而是一种确认。",
+    attracted:"你容易被「频率一致」的人吸引。不一定条件完美，但要在某个瞬间让你产生强烈的熟悉感——同样的幽默、同样的沉默节奏、同样对某件小事的执着。你会把这种共振视为信号。",
+    ideal:"他有自己的世界，但不介意让你走进来。你们在很多细节上巧合得离谱，又足够不同，让日子总有新东西可聊。他不把缘分挂在嘴边，却会用行动回应你的每一次靠近。",
+    strength:"你的真诚和直觉是很好的开路工具。你敢于在感觉对的时候迈出第一步，这让你不会困在暧昧里。你对「契合」的判断很准，通常第一印象就能筛掉不对的人。",
+    weakness:"你可能过度依赖感觉，而忽略现实层面的差异。把巧合当成保证，容易在后期遇到价值观冲突时措手不及。你需要给命运一点时间，让它证明自己不只是巧合。",
+    date:"一次没有目的地的城市漫游。坐反方向的电车，在陌生街区迷路，最后在一间小书店里发现彼此都在找同一本书。那一刻你会觉得，这趟路像是被谁安排好的。",
+    story:"你迟到了十分钟，推开咖啡馆的门，一眼就认出了他——尽管你们从没见过。\n\n「你怎么知道是我？」他问。你说：「因为你点的那杯，和我一样。」\n\n那天你们聊到店打烊，从喜欢的作家聊到害怕的东西，从童年聊到还没实现的愿望。临走时他说：「好像认识很久了。」你没敢说，你回家后在纸上写下第一行字：如果真有命运，大概就是今晚这样。",
+    quote:"世界那么大，偏偏是我们两个人，在同一秒抬起了头。"
+  },
+  {
+    name:"欢喜冤家", tagline:"从互相看不顺眼，到谁也离不开谁",
+    vec:[62,85,64,70,82,82,38], keywords:["拌嘴","火花","势均力敌"],
+    background:"第一次见面你们差点吵起来。他嫌你太倔，你嫌他太拽，自此每次相遇都像一场小型战役。可奇怪的是，吵架之后你总会想起他说的话，遇事第一反应竟然是「如果是他，会怎么说」。等你们终于意识到这是什么，已经谁也装不回去了。",
+    analysis:"你是高能量、高参与感的恋人。你喜欢有来有回的关系，讨厌一潭死水的客气。你的表达直接、反应快，情绪来得猛去得也快。对你而言，争执不等于伤害，而是一种确认彼此都在乎的方式——只要吵完还能一起吃饭。",
+    attracted:"你容易被「跟得上你节奏」的人吸引。他要有主见、敢反驳、不会被你的锋芒吓退。太温顺的人会让你觉得无聊，恰到好处的挑衅反而让你心跳加速。你需要的是一个对手，也是一个队友。",
+    ideal:"他聪明、嘴快、有自己的原则，吵完架能第一个递台阶。你们的关系像一场势均力敌的比赛，输赢不重要，重要的是始终在同一场上。彼此的锋利，最后都变成了只给对方的幽默。",
+    strength:"你的热情让关系永远不冷场。你敢说敢做，能迅速打破僵局，也能把沉闷的日子搅出声音。你不会把不满憋到变质，这让问题更容易被及时处理。",
+    weakness:"过于习惯对抗，可能让你在真正需要温柔的时候也嘴硬。表达方式太冲，容易在对方脆弱时误伤。学会分辨「拌嘴」和「伤害」，是你在这段关系里最重要的功课。",
+    date:"一场有点较真的桌游之夜，或者一起去看一部你们都吐槽过的烂片。重点是全程互怼、谁也不服谁，最后笑笑闹闹地走在夜风里，发现手不知什么时候牵在了一起。",
+    story:"「你这个路线明显绕远了。」\n「那你导航啊。」\n「我导航了，是你偏不听。」\n\n你们在陌生路口吵了十分钟，最后一起蹲在便利店门口吃冰淇淋。他忽然说：「其实我还挺喜欢跟你吵架的。」你咬着勺子愣住，随即回了一句：「你品味真差。」\n\n可那天回去的路，你们谁都没再争方向。",
+    quote:"我们吵了一路，最后发现目的地其实是同一个。"
+  },
+  {
+    name:"慢热治愈", tagline:"没有轰轰烈烈，只有一天比一天更近",
+    vec:[45,28,72,15,28,8,62], keywords:["温吞","累积","安心"],
+    background:"你们的故事没有名场面。第一次见面平平无奇，第二次也不过如此。变化发生在第几十次：你开始习惯在消息里说废话，开始留意他今天累不累，开始在过马路时自然地放慢脚步。等回头看，才发现那段没有波澜的日子，已经把你悄悄治愈。",
+    analysis:"你是极度慢热型的人。你对热烈有本能的谨慎，更相信日复一日积累出的信任。你的喜欢不向外爆炸，而是向内生长。你不会制造戏剧性，却擅长把日子过得稳当——这种稳定，本身就是很深的爱。",
+    attracted:"你容易被「不催促、不压迫、能陪你慢慢来」的人吸引。他不需要多会制造惊喜，但要在你沉默时不焦躁，在你后退时不追问。你能感受到那种温和而坚定的靠近，并会逐渐向它打开。",
+    ideal:"他耐心、踏实、情绪稳定，愿意用几个月的时间只做一件小事：让你放心。你们的关系像两棵挨着长的树，不纠缠，却在同一片土里慢慢把根连在一起。",
+    strength:"你给出的感情极其可靠。一旦认定，就几乎不会动摇。你对细节的体察让别人觉得被照顾得很舒服，那种「不需要解释就会被理解」的感觉，是你最珍贵的天赋。",
+    weakness:"太慢的节奏可能让对方不确定你的态度，甚至误以为你不够喜欢。你需要在关键时刻给出一点点明确的回应——哪怕只是一句「我挺想见你的」。",
+    date:"一个普通的周三傍晚。一起去超市买菜，回来在厨房里各忙各的，边做饭边聊今天发生的小事。没有音乐，没有烛光，只有抽油烟机的声音和偶尔的笑声。饭后洗碗时，他轻轻碰了碰你的手肘。",
+    story:"你们在一起三个月，没有任何人知道。\n\n第四个月的一个早上，你发烧了。他请了假，煮了粥，坐在旁边看你喝完。你没有说谢谢，他也没有说别怕。只是临走前，他把你的杯子换成了温水。\n\n那天晚上你发了第一条长消息给他：「我不知道从什么时候开始的，但现在已经很久了。」他回：「我也是，从很久以前。」\n\n原来你们都在慢慢走，只是朝着彼此。",
+    quote:"我没有一夜之间喜欢上你，我是每一天，都喜欢你一点点。"
+  },
+  {
+    name:"破镜重圆", tagline:"绕了一大圈，最后还是走向彼此",
+    vec:[70,52,60,58,55,48,82], keywords:["重逢","过往","第二次"],
+    background:"你们曾经很近，也曾经走散。分开的理由说大不大，说小也不小——年轻、骄傲、时机不对。几年后在一场无关紧要的场合重逢，你发现自己对他的记忆根本没变。你们都带着旧日的痕迹，也带着新的自己，重新站在了对方面前。",
+    analysis:"你对感情有很深的记忆力和辨识力。你不是轻易开始的人，一旦开始就会把对方写进自己的故事里；即使分开，那段经历也会长期影响你。你重视关系的「意义」，相信有些相遇值得第二次机会。",
+    attracted:"你容易被「有故事感」的人吸引——他身上要有时间的厚度，有你读得懂的沉默，最好还和你共享某段过去。你对新鲜的脸兴趣有限，但对熟悉的灵魂格外敏感。",
+    ideal:"他成熟、坦诚，愿意面对过去而不是假装没发生。他明白重逢不是重演，而是带着新的理解重新认识彼此。你们之间有一层别人插不进来的共同记忆，这是关系的底色。",
+    strength:"你的感情有韧性，不会因为一次失败就否定爱的可能。你擅长反思，能从过去里提取经验而不是只留下怨气。重新开始时，你比从前更清楚自己要什么。",
+    weakness:"旧伤可能让你在靠近时反复犹豫，甚至用试探代替信任。你也容易拿现在和过去比较，给关系增加无形的压力。真正的重圆，不是回到从前，而是允许彼此不同。",
+    date:"回到你们最初相识的地方，但这次不要在老位置坐下。换一家店，走一条没走过的路，用新的记忆覆盖旧的。带一本你们当年讨论过的书，现在交换批注。",
+    story:"重逢那天他递给你一杯热美式，和很多年前一样。你接过来，笑了一下：「你还记得啊。」\n\n「有些事不用记，」他说，「一直都在。」\n\n你们聊起分开那年的事，语气平静得像在讲别人的故事。临走时他说：「这次不走了，除非你赶我。」你把杯子放下，很久才开口：「那试试看吧。」\n\n这一次，你们都把话说完了。",
+    quote:"分开不是结局，是我们各自长大，好把这句喜欢重新说一遍。"
+  },
+  {
+    name:"年上年下", tagline:"在人生的不同段落，被同一种吸引击中",
+    vec:[60,70,70,65,66,75,45], keywords:["时差","引领","靠近"],
+    background:"你们的人生阶段并不完全同步：一个已经在处理现实的重量，一个还带着向前的冲劲。这种时差起初让你们争执，后来却变成彼此的补给——他从你这里学到勇敢，你从他那里学到从容。吸引发生得毫无道理，又顺理成章。",
+    analysis:"你对关系的判断不依赖年龄或标签，更在意对方能否带来新的视角。你表达直接，行动力强，喜欢明确推进关系。你既能被成熟感吸引，也会被赤诚打动，关键在于对方是否真诚面对你。",
+    attracted:"你容易被「和自己互补的人」吸引。他拥有你欠缺的那部分人生经验或生命力，能让你看到另一种活法。你不需要对方完全理解你，但需要在重要事情上愿意拉你一把。",
+    ideal:"他不把你当小孩，也不把你当仰视的对象。他有自己的节奏，愿意让你按自己的速度成长。你们之间的差异不会消失，但会被转化成有趣的部分，而不是争执的理由。",
+    strength:"你的开放和主动让关系跨越很多现实障碍。你愿意学习，也愿意分享，不会用「我们不一样」当借口停止沟通。你给对方的空间感和尊重，是这段关系最稳的地基。",
+    weakness:"人生阶段不同容易带来期待错位：一方想要承诺，一方还在探索。你需要把「想要什么」说清楚，而不是假设对方自然会懂。否则时差会变成误解。",
+    date:"一场有主题的城市散步：他讲你没经历过的工作年代，你讲他没赶上的新潮流。找一家能坐很久的咖啡馆，把各自的人生故事交换一遍。结束时你会发现，时差其实是可以被填平的。",
+    story:"他说：「我像你这么大的时候，根本不敢想这些。」\n你说：「可我现在就在想，而且想得很清楚。」\n\n那晚你们沿着江边走了很久。他讲那些年走过的弯路，你讲还没走但已经期待的路。风有点凉，他把外套披到你肩上，动作自然得像做过很多次。\n\n你们都知道彼此活在不同的时间里。但那一刻，时间好像忽然对齐了。",
+    quote:"我们不在同一页，却读着同一个故事。"
+  },
+  {
+    name:"先婚后爱", tagline:"从陌生相处开始，长出真正的感情",
+    vec:[40,34,76,20,34,18,52], keywords:["日常","责任","生长"],
+    background:"开始的原因也许不那么浪漫：一纸约定、一次冲动、一个需要互相帮忙的时机。你们把关系约定得像一份合作条款，谁也没提「爱」这个字。可日子一天天过去，条款被生活改写，某天你发现自己在等他回家——那已经不是义务了。",
+    analysis:"你在感情里务实、克制，行动先于语言。你不轻易交付情绪，但一旦承担了责任就会认真到底。你的爱不是从心动开始的，而是从「我愿意照顾你」开始的。对你来说，稳定的相处比激烈的告白更可信。",
+    attracted:"你容易被「可靠、能过日子、说话算数」的人吸引。他未必有趣，但一定要让你放心。你会观察他怎么处理琐事、如何对待承诺，这些在你心里的分量远大于外表和甜言蜜语。",
+    ideal:"他不要求你立刻交出感情，而是陪你把生活先过顺。他懂得分寸，也懂得在适当的时候越界一点点。你们的关系从契约开始，最后变成一种比契约更牢固的默契。",
+    strength:"你极其可靠，承诺过的就会做到。你不靠情绪维持关系，因此在日子最难的时候也不会轻易撤离。这种踏实的力量，是很多轰轰烈烈的感情缺少的。",
+    weakness:"太讲规则和边界，可能让感情缺少温度。你习惯把感受藏在行动后面，对方若读不懂，就会觉得你冷淡。偶尔说一句「我在意你」，比多做十件事更有效。",
+    date:"一次共同采购。你们认真地列清单、比价格、争论买哪种酱油，像两个严肃的合伙人。回到家一起收拾，晚饭时他说：「这样好像也挺好的。」你点头，没敢看他的眼睛。",
+    story:"你们约定得很清楚：互不干涉，期限一年。\n\n第三个月，他开始记得你不吃香菜；第五个月，你会在他加班时留一盏灯；第八个月，你在超市里下意识拿了他常用的那个牌子。\n\n一年到期那天，他把一份文件放到你面前——是续约。你翻到最后一页，看见手写的一行字：这一条不在合同里，是我自己想加的。\n\n你拿起笔，在那行字下面签了名。",
+    quote:"我没有一眼爱上你，我是在每一个日子里，慢慢同意了这件事。"
+  },
+  {
+    name:"灵魂知己", tagline:"先听懂彼此，再爱上彼此",
+    vec:[66,40,50,42,42,36,100], keywords:["理解","共鸣","深度"],
+    background:"和别人聊天你常常觉得累，要解释、要铺垫、要翻译自己。但和他在一起不用。你说上半句，他已经接住下半句；你沉默，他知道你在想什么。你们的关系从精神世界开始，爱情是后来才慢慢长出来的果实。",
+    analysis:"你是深度优先型的人。你最看重的不是陪伴的时长，而是理解的质量。你对表面热闹兴趣不大，却会为一句话的精准而心动许久。你的情感表达偏内敛，但一旦认定，就会把对方放进最私人精神空间。",
+    attracted:"你容易被「能听懂你」的人吸引。他要有独立思考的能力、丰富的内在，以及不急于评判的耐心。外貌和条件很难真正打动你，除非他在某个观点上精准地说出了你没说出口的话。",
+    ideal:"他是一本值得反复读的书，也是少数能读懂你的人。你们可以聊一整夜，也可以各自沉默很久。他不要求你变得外向，只在一个安全的距离上，持续地理解你。",
+    strength:"你建立关系的质量极高。你能看见别人看不见的部分，这种被深度理解的感觉极其稀有。你给出的信任不多，但一旦给出就非常稳固，能支撑关系走过很多现实难题。",
+    weakness:"你可能把精神契合看得太高，而忽略了日常相处的能力。再懂你的人，也需要具体的关心和现实的照顾。别让「他懂我」代替「他对我好」。",
+    date:"一间安静的书店二楼，或者深夜的便利店门口。你们聊书、聊电影、聊那些没答案的问题，从十点到凌晨两点。没有牵手，没有告白，但你知道这一晚比任何约会都更接近爱情。",
+    story:"你发了一段话给他，只有三行，讲的是一件很久以前的小事。\n\n他过了很久才回：「我懂。你不是难过那件事本身，你是觉得没有人看见。」\n\n你盯着屏幕，手指停在键盘上。那一刻你忽然意识到，自己好像从来没有被人这样准确地描述过。\n\n后来你常常想起那个夜晚。爱情不是从「我喜欢你」开始的，是从「你懂我」开始的。",
+    quote:"在世界吵吵闹闹的时候，你是我唯一不用解释的人。"
+  },
+  {
+    name:"热烈追爱", tagline:"喜欢就靠近，绝不让心动擦肩而过",
+    vec:[72,96,58,90,90,96,55], keywords:["主动","滚烫","不犹豫"],
+    background:"你遇见心动的方式很简单：看见了，就走过去。你不相信「有缘自然会再见面」这种话，因为你知道人海里错过一次可能就是一辈子。于是你告白、邀约、制造机会，把别人犹豫的时间都用来靠近。你的爱情从一开始就是一场明亮的冲刺。",
+    analysis:"你是情感表达极高、行动力极强的人。你不太隐藏情绪，喜欢就让对方知道，难过也不怕被看见。你对新鲜感保持开放，对关系的推进有清晰意愿。你相信爱需要被表达，而不是被猜测。",
+    attracted:"你容易被「让你想立刻靠近的人」吸引——可能是某个瞬间的光彩，也可能是一种你无法抗拒的气息。你喜欢有回应的人，哪怕回应是笨拙的，也比冷淡更能让你继续投入。",
+    ideal:"他真诚、有生命力，愿意接住你的热烈而不是退后。他不必和你一样外向，但至少愿意告诉你他的想法。你们之间需要有来有往，你的喜欢不能一直单方面奔跑。",
+    strength:"你的勇敢是你最大的魅力。你让对方免于猜测，也让关系迅速进入真实阶段。你不怕被拒绝，这种坦荡本身就极具吸引力。很多美好的故事，都是因为你先迈出了那一步。",
+    weakness:"太快可能让对方压力过大，也可能让你在还没看清一个人之前就投入太多。热烈不等于持久——学会在冲出去之前停三秒，会让你的喜欢走得更远。",
+    date:"一场你主动策划的冒险：深夜爬山看日出、临时订两张票去看海、或者在下雨的操场上跑一圈。重点是那种「我们一起做了件疯事」的记忆，它会成为你们关系的开端。",
+    story:"那天活动结束，你在门口叫住了他。\n\n「等一下，」你说，「我有件事想现在讲完，不然我会后悔一整年。」\n\n他停下来，有点意外。你深吸一口气，把那句喜欢说得又快又清楚，说完之后整个人都在发烫。\n\n他愣了几秒，笑了：「你比我想的还要直接。」\n\n「那你要不要给个答案？」你问。\n\n「要，」他说，「但我能不能也先说一句——我其实等了很久。」",
+    quote:"我不管结局怎样，至少在心动那一刻，我没有躲开。"
+  },
+  {
+    name:"异地恋爱", tagline:"隔着距离，把想念过成一种日常",
+    vec:[76,58,44,62,82,56,96], keywords:["距离","守望","共振"],
+    background:"你们相识时就知道要分开：一个在南方，一个在北方；或者中间隔着时区、山海和说不清的手续。你们把生活拆成两段，靠屏幕拼在一起。别人觉得辛苦，你们却在这种辛苦里找到了一种独特的亲密——因为每一次见面，都是被郑重期待的。",
+    analysis:"你对感情有很强的信念感，愿意为关系承担现实成本。你重视精神连接胜过物理陪伴，也很擅长把抽象的想念变成具体的行动。你的浪漫往往不依赖场景，而依赖「我一直在想你」这件事本身。",
+    attracted:"你容易被「能让你安心的人」吸引。他要有清晰的目标和足够的自制力，能在看不到你的日子里依然保持联系。你不需要时时刻刻的陪伴，但需要在重要时刻从不缺席。",
+    ideal:"他理解距离不是感情的敌人，而是一段共同完成的事。他愿意规划见面、分享琐碎、把等待变成可数的日子。你们之间的信任不是靠监视建立的，而是靠一次次兑现承诺累积的。",
+    strength:"你的独立和坚定让关系在远距离下依然稳定。你不会用焦虑消耗彼此，而是把想念转化成更珍惜每一次相处。这种能力，让你们的连接比很多朝夕相处的人更深。",
+    weakness:"长期缺席容易让生活里出现空白，你可能会错过对方真实的情绪变化。不要只在固定时间联系，也要允许自己在脆弱时说「我今天不太开心」。距离需要被坦白，而不是被逞强。",
+    date:"一次横跨半座城的奔赴。你提前一周准备好要带来的东西：他爱吃的零食、写着日期的车票、一沓在异地日子里写下的小纸条。见面那一刻什么都不用说，拥抱就够了。",
+    story:"你们视频时信号不太好，画面一顿一顿的。他说：「我这边下雨了。」你说：「我这边月亮很亮。」\n\n「那算是同一个晚上吗？」他问。\n\n「当然算，」你说，「我们看的又不是同一片天吗。」\n\n挂断之后，你把那晚的月亮拍下来发给他。三分钟后，他发来一张雨中的路灯。两张照片放在一起，像一封信的两个部分。\n\n你们都知道还要等很久。但那天晚上，距离好像短了一点。",
+    quote:"我们隔着一整座城，却共享着同一个失眠的夜晚。"
+  },
+  {
+    name:"平淡日常", tagline:"一起吃饭、散步、生活，然后在细节里幸福",
+    vec:[28,40,86,22,18,22,46], keywords:["烟火","安稳","细水长流"],
+    background:"你们的故事几乎没有情节。没有盛大告白，没有戏剧冲突，甚至说不清是哪一天开始的。你们只是越来越自然地出现在彼此的生活里：一起买菜、一起等红灯、一起在沙发上睡着。后来你发现，所谓理想爱情，不过是有人愿意和你把日子过完。",
+    analysis:"你是低需求、高稳定的恋人。你不太需要浪漫的包装，更在意相处是否舒服。你的情感不剧烈，但很持久；不擅长制造惊喜，却擅长记住对方喜欢吃什么。你的爱意藏在具体的生活里，安静但扎实。",
+    attracted:"你容易被「相处舒服」的人吸引。他不一定要多有趣，但要在同一张餐桌上不让你尴尬，在逛超市时自然接过购物车。你判断一个人的标准很简单：和他一起过日子，会不会累。",
+    ideal:"他踏实、温和、有生活能力。你们不需要太多共同爱好，只需要对「怎么过日子」有基本共识。他会记得你喝咖啡不加糖，你会在他累了的时候少说两句——这就是你们的语言。",
+    strength:"你的稳定让关系极少内耗。你不追求刺激，也不制造波澜，能把最普通的日子过得让人安心。这种能力在长期关系里极其珍贵，是很多轰轰烈烈的人最终想要抵达的地方。",
+    weakness:"过于平淡可能让感情缺少被确认的时刻。你以为对方知道，其实他也需要听见一句「我很高兴和你在一起」。偶尔制造一点小变化，不是浪费，而是给日子上发条。",
+    date:"周日下午的菜市场，然后是两个小时的厨房时间。你们边切菜边聊这周的琐事，饭后一起下楼散步，走那条走过无数次的路。今晚没有什么特别的——但你知道明天还会一样。",
+    story:"那天下班，他在厨房煮面，你在客厅整理账单。谁都没说话，只有水开的声音。\n\n「今天买点水果吧。」他说。\n「好，买你要吃的那种。」你回。\n\n他探头看了你一眼，笑了笑，又转回去继续搅面。\n\n你忽然觉得，这样的日子已经很好了。没有惊喜，没有波澜，甚至没有多少值得讲给别人听的内容。但就是这一碗面、这一句「好」，让你很确定：自己想过这样的生活，想和这个人一起。",
+    quote:"最浪漫的事，是我们把日子过成了不用说话也默契的样子。"
+  },
+  {
+    name:"契约恋人", tagline:"从一场假装开始，演着演着就成真了",
+    vec:[64,78,54,66,86,86,36], keywords:["假装","边界","失控"],
+    background:"你们一开始各取所需：应付一场同学会、躲过一轮催婚、或者只是为了让某人死心。你们签署了约定，列好了条款，甚至约定了何时结束。可当肢体语言和眼神开始不受控制，你才发现——最危险的谎言，是演得太像真的。",
+    analysis:"你对关系有很强的掌控感，也擅长在规则里游刃有余。你反应快、表达灵活，能在各种社交场面里应对自如。你表面冷静，实际上很享受这种带一点危险的靠近——因为假装给了你一个安全的借口。",
+    attracted:"你容易被「聪明、会配合、懂分寸」的人吸引。他需要能和你一起把戏演下去，最好还偶尔 improvisation 一下，让你猝不及防。你偏爱有张力的人，太老实反而让你提不起兴趣。",
+    ideal:"他明白这只是开始，而不是全部。他知道什么时候该配合你演戏，什么时候该认真问一句「我们还要继续假装吗」。他在规则里给你自由，也在必要时打破规则。",
+    strength:"你的社交智慧和应变力让你在关系初期极具魅力。你不会尴尬，不会冷场，能迅速把两个人拉进同一个节奏。你也很懂保护自己，不会轻易在不确定时交出全部。",
+    weakness:"习惯伪装会让你难以分辨：哪些是演的，哪些是真的。你可能在关系已经变化时还坚持说「这只是约定」，错过真正靠近的机会。诚实一点，反而更有惊喜。",
+    date:"一场需要「表演」的场合：公司年会、朋友的婚礼、家庭聚餐。你们配合默契，眼神交流里全是只有两个人懂的暗号。散场后在路边等车，沉默了几秒，他忽然说：「刚才那句，不是演的吧？」",
+    story:"合同上写着：为期三个月，对外以恋人身份出现，互不干涉私生活。\n\n第一个月，你们配合得很好。第二个月，你开始在他面前自然地把头靠过去。第三个月的最后一天，他把合同放在桌上，说：「条款我看了，有一条我想改。」\n\n「哪一条？」\n\n「期限，」他说，「改成长期。」\n\n你拿起笔，手有点抖。这一次，你没有再检查条款细节。",
+    quote:"我本来只想借你演一场戏，结果把自己也演了进去。"
+  },
+  {
+    name:"旧友新生", tagline:"从朋友到恋人，中间只差一次重新打量",
+    vec:[46,50,76,26,40,30,86], keywords:["转身","熟悉","重新认识"],
+    background:"你们做过很久的朋友：分享过秘密，也陪对方熬过低谷。你们熟悉彼此的缺点，熟悉到以为再无可能。直到某天，一个偶然的场合让你用全新的目光看了他一眼——原来那个熟悉的人，也有让人心跳加速的一面。",
+    analysis:"你建立感情的路径是「先信任，再心动」。你对亲密关系的门槛很高，但一旦跨过去就很深。你不追求戏剧性的开始，更看重关系的可靠性。你的喜欢往往在长久相处后突然显形，像一扇一直没注意的门被推开。",
+    attracted:"你容易被「熟悉但仍有未知」的人吸引。他必须让你有安全感，同时又能在某个瞬间让你意外——比如第一次看见他认真工作、第一次发现他也有柔软的一面。这种反差，比陌生人的新鲜更能打动你。",
+    ideal:"他不急着改变你们的关系，而是耐心地让你重新认识他。他尊重你们过去的友谊，也敢于在合适的时候往前一步。你们之间的过渡很自然，像一条本来就在那里的路。",
+    strength:"你给出的信任经过长时间检验，因此非常牢靠。你了解对方的过去，也理解他的处境，这让你的爱更贴近真实而不是想象。你能把友谊里积累的默契直接带进爱情。",
+    weakness:"你可能太依赖「熟悉」而迟迟看不见变化，甚至把对方的新一面强行归进旧印象里。当你意识到心意时，对方可能已经等了很久。别让习惯成为遮住心意的布。",
+    date:"一次没有Third wheel的老友聚餐。你们聊起第一次见面的场景，笑着吐槽彼此当年的样子。饭后沿着街慢慢走，他忽然安静下来，认真看着你说：「其实有件事，我想换个身份再跟你说一遍。」",
+    story:"你们认识七年。七年里，你见过他最狼狈的样子，也见过他最得意的样子。\n\n那天聚会散场，他送你回去。路灯下你抬头，忽然发现他侧脸的线条比以前清晰了很多——大概是你第一次认真看。\n\n「你怎么了？」他问。\n\n「没什么，」你说，「就是觉得，我好像不太认识你。」\n\n他停顿了一下，笑了：「那我们重新认识一次？」\n\n你点点头。这一次，你们都报了不同的名字——一个朋友的结束，和一个故事的开始。",
+    quote:"原来我一直站在爱情里，只是把它叫作了友谊。"
+  }
+];
+
+/* ============ 剧本亲和度：每个选项对应的剧本倾向（可跨题累积） ============
+   0双向暗恋 1青梅竹马 2命中注定 3欢喜冤家 4慢热治愈 5破镜重圆
+   6年上年下 7先婚后爱 8灵魂知己 9热烈追爱 10异地恋爱 11平淡日常
+   12契约恋人 13旧友新生
+*/
+const AFFINITY = [
+  [[9,2],[0,4,1],[2,0],[2,8,10]],
+  [[8,0],[9,3],[11,13,1],[0,2,10]],
+  [[11,1],[8,4,10],[0,13],[2,3]],
+  [[9,3],[0,4],[0,8],[3,12]],
+  [[11,4,1],[9,12,10],[7,11,6],[2,9]],
+  [[8,11,1],[3,9],[7,11,10],[2,12]],
+  [[2,8],[9,3],[4,8],[11,1]],
+  [[7,12],[9,10],[13,6],[0,4]],
+  [[9,3],[0,8],[0,4],[0,13,1]],
+  [[8,4],[9,6],[11,7],[3,12]],
+  [[5,7],[3,9],[11,1],[4,10]],
+  [[8,5,10],[11,3],[9,12,6],[0,4]],
+  [[0,8],[9,10],[11,6],[9,12]],
+  [[2,9],[11,7],[12,10,6],[1,13,10]],
+  [[9,12,6],[4,8],[13,7],[2,5,1]],
+  [[9,6],[0,13],[4,0,10],[1,7]],
+  [[9,3,6],[8,4],[8,0],[7,11,10]],
+  [[9,6],[5,13,1],[0,4],[0,8]],
+  [[11,6],[10,8],[9,3],[10,7]],
+  [[10,7],[0,4],[8,13],[2,12]],
+  [[0,8],[11,7],[3,12],[1,4]],
+  [[7,5],[11,13,1],[6,12],[10,7]],
+  [[11,7],[10,9],[10,8],[1,2]],
+  [[5,8],[0,4],[11,6,1],[8,3,10]],
+  [[2,5],[9,0,6],[11,4,1],[13,8,10]],
+  [[11,7,1,6],[2,5],[8,0,10],[9,3]],
+  [[9,12],[11,4,1],[8,10],[3,2]],
+  [[9,3],[0,4],[8,10],[10,7,6]],
+  [[9,12],[4,0],[2,1],[10,7]],
+  [[11,1],[0,4],[5,8,6,10],[3,13]],
+  [[2,9],[4,11,1],[11,6],[7,11,10]],
+  [[0,2],[3,9],[1,7],[5,10]],
+  [[2,9],[13,4],[8,0],[6,12]],
+  [[11,6],[9,0],[10,4],[3,12]],
+  [[9,5],[3,0],[12,11,1],[8,5,6,10]],
+  [[9,6],[13,4],[0,12],[8,10]],
+  [[13,2],[7,4],[9,8,10],[0,5]],
+  [[0,1],[9,2],[4,0],[8,5,10]],
+  [[2,9],[11,1],[8,0,6],[12,3]],
+  [[2,9],[1,13],[12,3,6],[5,0,10]]
+];
+QUESTIONS.forEach((q,i)=>q.options.forEach((o,j)=>{o.t = AFFINITY[i][j];}));
+
+/* ============ 状态与工具 ============ */
+const $ = id => document.getElementById(id);
+const STORAGE_KEY = "loveScriptQuiz_v1";
+let answers = Array(QUESTIONS.length).fill(null);
+let current = 0;
+let resultData = null;
+let locked = false;
+
+function toast(msg){
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=>t.classList.remove("show"), 2200);
+}
+function showView(id){
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  $(id).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function save(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(answers)); }catch(e){} }
+function load(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const arr = JSON.parse(raw);
+      if(Array.isArray(arr) && arr.length === QUESTIONS.length) answers = arr;
+    }
+  }catch(e){}
+}
+
+/* ============ 星星装饰 ============ */
+(function makeStars(){
+  const box = $("stars");
+  const positions = [
+    [8,18,3],[18,72,2],[26,32,4],[34,86,2],[44,14,3],[52,58,2],
+    [62,26,4],[70,78,2],[78,40,3],[86,64,2],[92,20,4],[96,84,3],
+    [12,44,2],[38,54,3],[58,92,2],[82,10,2]
+  ];
+  positions.forEach((p,i)=>{
+    const s = document.createElement("span");
+    s.className = "star";
+    s.style.left = p[0]+"%"; s.style.top = p[1]+"%";
+    s.style.width = s.style.height = p[2]+"px";
+    s.style.animationDelay = (i%7)*.6+"s";
+    box.appendChild(s);
+  });
+})();
+
+/* ============ 进度刻度 ============ */
+(function makeTicks(){
+  const box = $("ticks");
+  for(let i=0;i<QUESTIONS.length;i++) box.appendChild(document.createElement("i"));
+})();
+
+/* ============ 答题逻辑 ============ */
+function renderQuestion(animate){
+  const q = QUESTIONS[current];
+  const card = $("qcard");
+  const paint = ()=>{
+    $("scene").textContent = q.scene;
+    $("qtext").textContent = q.text;
+    const box = $("options");
+    box.innerHTML = "";
+    q.options.forEach((op,i)=>{
+      const btn = document.createElement("button");
+      btn.className = "opt" + (answers[current]===i ? " selected":"");
+      btn.type = "button";
+      const key = document.createElement("span"); key.className="key"; key.textContent="ABCD"[i];
+      const txt = document.createElement("span"); txt.className="txt"; txt.textContent=op.text;
+      const arr = document.createElement("span"); arr.className="arrow"; arr.textContent="›";
+      btn.append(key,txt,arr);
+      btn.addEventListener("click",()=>choose(i));
+      box.appendChild(btn);
+    });
+    const done = answers.filter(a=>a!==null).length;
+    const pct = Math.round(done/QUESTIONS.length*100);
+    $("curNum").textContent = current+1;
+    $("percent").textContent = pct+"%";
+    $("progressFill").style.width = pct+"%";
+    $("backBtn").disabled = current===0;
+    document.querySelectorAll("#ticks i").forEach((el,i)=>el.classList.toggle("done", answers[i]!==null));
+    card.classList.remove("out");
+    if(animate){ card.classList.remove("in"); void card.offsetWidth; card.classList.add("in"); }
+  };
+  if(animate){
+    card.classList.add("out");
+    setTimeout(paint, 210);
+  }else{
+    paint();
+  }
+}
+
+function choose(i){
+  if(locked) return;
+  locked = true;
+  answers[current] = i;
+  save();
+  const opts = $("options").children;
+  for(let j=0;j<opts.length;j++) opts[j].classList.toggle("selected", j===i);
+  setTimeout(()=>{
+    if(current === QUESTIONS.length-1){
+      showResult();
+    }else{
+      current++;
+      renderQuestion(true);
+    }
+    locked = false;
+  }, 280);
+}
+
+function goBack(){
+  if(locked || current===0) return;
+  locked = true;
+  current--;
+  renderQuestion(true);
+  locked = false;
+}
+
+/* ============ 计分与匹配 ============ */
+function computeScores(){
+  const sum = {}, count = {};
+  DIMS.forEach(d=>{sum[d.k]=0;count[d.k]=0;});
+  answers.forEach((a,qi)=>{
+    if(a===null) return;
+    const w = QUESTIONS[qi].options[a].w;
+    Object.keys(w).forEach(k=>{ sum[k]+=w[k]; count[k]++; });
+  });
+  const s = {};
+  DIMS.forEach(d=>{
+    s[d.k] = count[d.k] ? Math.max(0,Math.min(100,Math.round(50 + sum[d.k]/(count[d.k]*2)*50))) : 50;
+  });
+  return s;
+}
+function matchScript(s){
+  /* 40 道题的选项亲和度汇总；维度分数用于在同分时做二次判断 */
+  const votes = SCRIPTS.map(()=>0);
+  let answered = 0;
+  answers.forEach((a,qi)=>{
+    if(a===null) return;
+    answered++;
+    (QUESTIONS[qi].options[a].t||[]).forEach(idx=>{ votes[idx]++; });
+  });
+  const distTo = sc => {
+    let d=0;
+    DIMS.forEach((dim,i)=>{ d += Math.pow(s[dim.k]-sc.vec[i],2); });
+    return Math.sqrt(d);
+  };
+  const ranked = SCRIPTS.map((sc,i)=>({sc, v:votes[i], d:distTo(sc)}))
+    .sort((a,b)=> (b.v-a.v) || (a.d-b.d));
+  const top = ranked[0], second = ranked[1];
+  const fit = Math.max(88, Math.min(98,
+    90 + Math.round(top.v/Math.max(1,answered)*7) + (top.v-second.v>=6?1:0)
+  ));
+  return {script:top.sc, fit, runner:second.sc, votes};
+}
+function profileLine(s){
+  const part = DIMS.map(d=>{
+    const v = s[d.k];
+    if(v>=68) return d.name+"偏「"+d.high+"」";
+    if(v<=32) return d.name+"偏「"+d.low+"」";
+    return d.name+"处在两种气质之间";
+  });
+  return "在你的剧本里，"+part.slice(0,4).join("，")+"；而"+part.slice(4).join("，")+"。这些看似矛盾的部分合在一起，才构成了你在爱情里最真实的样子。";
+}
+
+/* ============ 结果渲染 ============ */
+function showResult(){
+  const s = computeScores();
+  const m = matchScript(s);
+  resultData = {s, m, sc:m.script};
+  const sc = m.script;
+  const no = String(SCRIPTS.indexOf(sc)+1).padStart(2,"0");
+  const dimHtml = DIMS.map(d=>{
+    const v = s[d.k];
+    return `<div class="dim">
+      <div class="dim-head"><b>${d.name}</b><span>${v} / 100</span></div>
+      <div class="dim-bar"><i style="left:${v}%"></i></div>
+      <div class="dim-scale"><span>${d.low}</span><span>${d.high}</span></div>
+    </div>`;
+  }).join("");
+  const kw = sc.keywords.map(k=>`<span class="kw">✦ ${k}</span>`).join("");
+  const story = sc.story.split("\n\n").map(p=>`<p>${p.replace(/\n/g,"<br>")}</p>`).join("");
+  $("resultContent").innerHTML = `
+    <div class="result-cover">
+      <svg class="cover-moon" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+        <path d="M62 12a38 38 0 1 0 26 66A40 40 0 0 1 62 12Z" fill="#E7D3AE" stroke="#C7A267" stroke-width="1.5"/>
+        <path d="M74 30l2.2 5.8L82 38l-5.8 2.2L74 46l-2.2-5.8L66 38l5.8-2.2L74 30Z" fill="#C7A267"/>
+      </svg>
+      <div class="script-no">YOUR LOVE SCRIPT · NO.${no}</div>
+      <h1>${sc.name}</h1>
+      <div class="tagline">${sc.tagline}</div>
+      <div class="seal"><b>${m.fit}%</b><span>契合度</span></div>
+      <div class="keywords">${kw}</div>
+      <div class="side-line">你还有一条隐藏副线 · <b>${m.runner.name}</b></div>
+    </div>
+
+    <div class="section-title"><span>01</span><h3>你的恋爱性格切片</h3></div>
+    <div class="dims">${dimHtml}</div>
+    <div class="profile-note">${profileLine(s)}</div>
+
+    <div class="section-title"><span>02</span><h3>剧本设定与氛围</h3></div>
+    <div class="info-grid">
+      <div class="info wide"><h4><em>幕</em>故事背景</h4><p>${sc.background}</p></div>
+      <div class="info"><h4><em>我</em>恋爱性格分析</h4><p>${sc.analysis}</p></div>
+      <div class="info"><h4><em>遇</em>你容易被这样的人吸引</h4><p>${sc.attracted}</p></div>
+      <div class="info"><h4><em>他</em>理想伴侣画像</h4><p>${sc.ideal}</p></div>
+      <div class="info"><h4><em>＋</em>优势与潜在弱点</h4>
+        <div class="split"><div><strong>你的优势</strong>${sc.strength}</div><div><strong>潜在弱点</strong>${sc.weakness}</div></div>
+      </div>
+      <div class="info wide"><h4><em>约</em>最适合你的约会场景</h4><p>${sc.date}</p></div>
+    </div>
+
+    <div class="section-title"><span>03</span><h3>专属故事片段</h3></div>
+    <div class="letter"><div class="stamp">LOVE<br>STORY<br>✦ ${no}</div>${story}</div>
+
+    <div class="quote-box"><p>${sc.quote}</p><small>—— 写给你的恋爱剧本</small></div>
+  `;
+  showView("result");
+}
+
+/* ============ 复制结果 ============ */
+function copyResult(){
+  if(!resultData) return;
+  const {s,m,sc} = resultData;
+  const no = String(SCRIPTS.indexOf(sc)+1).padStart(2,"0");
+  const lines = [
+    `✦ 我的理想恋爱剧本：${sc.name}（NO.${no}）`,
+    `契合度 ${m.fit}% · ${sc.tagline}`,
+    "",
+    `【剧本氛围】${sc.background}`,
+    `【性格分析】${sc.analysis}`,
+    `【容易被吸引的人】${sc.attracted}`,
+    `【理想伴侣】${sc.ideal}`,
+    `【优势】${sc.strength}`,
+    `【潜在弱点】${sc.weakness}`,
+    `【最佳约会】${sc.date}`,
+    `【专属文案】${sc.quote}`,
+    "",
+    "测测你的理想恋爱剧本 · 一场关于心动的私人放映"
+  ];
+  const text = lines.join("\n");
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(()=>toast("已复制，去分享给你的故事吧 ✦")).catch(()=>fallbackCopy(text));
+  }else fallbackCopy(text);
+}
+function fallbackCopy(text){
+  const ta = document.createElement("textarea");
+  ta.value = text; ta.style.position="fixed"; ta.style.opacity="0";
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); toast("已复制，去分享给你的故事吧 ✦"); }
+  catch(e){ toast("复制失败，请长按截图保存"); }
+  document.body.removeChild(ta);
+}
+
+/* ============ 事件绑定 ============ */
+$("startBtn").addEventListener("click",()=>{
+  answers = Array(QUESTIONS.length).fill(null);
+  current = 0; save();
+  showView("quiz"); renderQuestion(true);
+});
+$("continueBtn").addEventListener("click",()=>{
+  const idx = answers.findIndex(a=>a===null);
+  current = idx===-1 ? 0 : idx;
+  showView("quiz"); renderQuestion(true);
+});
+$("backBtn").addEventListener("click",goBack);
+$("againBtn").addEventListener("click",()=>{
+  answers = Array(QUESTIONS.length).fill(null);
+  current = 0; resultData = null;
+  try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+  showView("home");
+  $("continueRow").style.display="none";
+  toast("已清空答案，可以重新放映啦");
+});
+$("copyBtn").addEventListener("click",copyResult);
+document.addEventListener("keydown",e=>{
+  if(!$("quiz").classList.contains("active")) return;
+  if(e.key>="1" && e.key<="4" && e.target.tagName!=="INPUT"){ choose(Number(e.key)-1); }
+  if(e.key==="ArrowLeft"){ goBack(); }
+});
+
+/* ============ 初始化 ============ */
+load();
+if(answers.some(a=>a!==null)) $("continueRow").style.display="flex";
+</script>
+</body>
+</html>
