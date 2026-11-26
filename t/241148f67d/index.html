@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#fbf8f6">
+<title>测测你究竟是什么类型的粉丝？</title>
+<style>
+/* ============================================================
+   视觉系统：现代杂志编辑风格 / 柔和纸感 / 移动端优先
+   ============================================================ */
+:root{
+  --ink:#2f2a2e;
+  --ink-soft:#6e6269;
+  --ink-faint:#9d9197;
+  --paper:#fbf8f6;
+  --card:rgba(255,255,255,.78);
+  --card-solid:#fffdfc;
+  --accent:#b46478;
+  --accent-deep:#965066;
+  --accent-soft:#e7cdd2;
+  --gold:#c2a15c;
+  --line:rgba(47,42,46,.13);
+  --serif:"Songti SC","STSong","Noto Serif SC","Source Han Serif SC",serif;
+  --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",-apple-system,BlinkMacSystemFont,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  margin:0;min-height:100vh;color:var(--ink);font-family:var(--sans);
+  font-size:15px;line-height:1.75;
+  background:
+    radial-gradient(900px 500px at 8% -10%,rgba(233,205,208,.55),transparent 60%),
+    radial-gradient(800px 600px at 105% 15%,rgba(226,215,193,.35),transparent 60%),
+    linear-gradient(160deg,#fdfbf9 0%,#f8f2f0 55%,#fbf7f3 100%);
+  background-attachment:fixed;
+}
+::selection{background:var(--accent-soft);color:var(--ink)}
+button{font-family:inherit;cursor:pointer}
+.app{max-width:760px;margin:0 auto;padding:28px 20px 72px;position:relative}
+.screen{display:none}
+/* 动画只做位移，不控制 opacity：即使预览容器不播放动画，内容也始终可见 */
+.screen.active{display:block;opacity:1;animation:rise .48s cubic-bezier(.2,.7,.25,1)}
+@keyframes rise{from{transform:translateY(14px)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){.screen.active{animation:none}*{transition:none!important}}
+
+/* ---------- 通用装饰 ---------- */
+.eyebrow{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 14px}
+.rule{width:42px;height:1px;background:var(--accent);margin:18px 0 22px;opacity:.7}
+.paper-card{
+  background:var(--card);border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 18px 50px -28px rgba(80,55,60,.35);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-radius:22px;
+}
+
+/* ---------- 首页 ---------- */
+.hero{padding:38px 30px 34px;text-align:center;position:relative;overflow:hidden}
+.hero:before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(115deg,transparent 0 22px,rgba(180,100,120,.035) 22px 23px);
+}
+.hero > *{position:relative}
+.hero-mark{
+  width:54px;height:54px;margin:0 auto 20px;border:1px solid var(--accent-soft);
+  border-radius:50%;display:grid;place-items:center;color:var(--accent);
+  font-family:var(--serif);font-size:21px;background:rgba(255,255,255,.6)
+}
+.hero h1{
+  font-family:var(--serif);font-weight:600;line-height:1.34;
+  font-size:clamp(30px,7.4vw,50px);margin:0;letter-spacing:.01em;
+}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .sub{color:var(--ink-soft);font-size:13.5px;margin:18px auto 0;max-width:430px;line-height:1.9}
+.intro{margin-top:20px;padding:24px 26px}
+.intro h2{font-family:var(--serif);font-size:17px;font-weight:600;margin:0 0 16px}
+.intro-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px 20px;margin:0;padding:0;list-style:none}
+.intro-grid li{font-size:12.5px;color:var(--ink-soft);line-height:1.7}
+.intro-grid b{display:block;font-family:var(--serif);font-size:15px;color:var(--ink);font-weight:600;margin-bottom:2px}
+.intro-note{margin:18px 0 0;font-size:12px;color:var(--ink-faint);line-height:1.8}
+.btn{
+  border:0;border-radius:999px;padding:14px 32px;font-size:14px;font-weight:600;
+  letter-spacing:.06em;transition:transform .2s,box-shadow .2s,opacity .2s;
+}
+.btn-primary{
+  color:#fff;background:linear-gradient(135deg,var(--accent),#cf8a94);
+  box-shadow:0 12px 28px -12px rgba(150,80,102,.8)
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 32px -12px rgba(150,80,102,.9)}
+.btn-ghost{background:transparent;color:var(--ink-soft);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.home-actions{display:flex;justify-content:center;margin-top:26px}
+
+/* ---------- 答题页 ---------- */
+.quiz-top{padding:6px 2px 0}
+.quiz-meta{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--ink-faint);letter-spacing:.08em}
+.quiz-meta b{font-family:var(--serif);font-size:16px;color:var(--ink);font-weight:600}
+.progress{height:3px;border-radius:9px;background:rgba(47,42,46,.09);margin:12px 0 26px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:9px;transition:width .45s cubic-bezier(.2,.7,.25,1)}
+.dim-tag{
+  display:inline-flex;align-items:center;gap:7px;font-size:10.5px;letter-spacing:.18em;
+  color:var(--accent);border:1px solid var(--accent-soft);border-radius:999px;
+  padding:5px 13px;background:rgba(255,255,255,.6)
+}
+.dim-tag:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.question{padding:26px 28px 28px;margin-top:16px}
+.question h2{font-family:var(--serif);font-size:clamp(18px,4.6vw,23px);line-height:1.6;font-weight:600;margin:16px 0 6px}
+.q-hint{font-size:11.5px;color:var(--ink-faint);margin:0 0 20px}
+.options{display:grid;gap:11px;grid-template-columns:1fr}
+@media(min-width:620px){.options{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.option{
+  display:flex;align-items:flex-start;gap:12px;text-align:left;
+  border:1px solid var(--line);border-radius:15px;padding:14px 15px;
+  background:rgba(255,255,255,.66);color:var(--ink);font-size:13.5px;line-height:1.65;
+  transition:border-color .2s,background .2s,transform .2s,box-shadow .2s;
+}
+.option:hover{border-color:var(--accent-soft);transform:translateY(-1px)}
+.option .box{
+  flex:0 0 19px;width:19px;height:19px;margin-top:2px;border-radius:50%;
+  border:1.4px solid #cbbec3;display:grid;place-items:center;transition:.2s;
+  font-size:11px;color:transparent;line-height:1
+}
+.option.selected{
+  border-color:var(--accent);
+  background:linear-gradient(135deg,rgba(180,100,120,.11),rgba(255,255,255,.92));
+  box-shadow:0 8px 20px -14px rgba(150,80,102,.7)
+}
+.option.selected .box{background:var(--accent);border-color:var(--accent);color:#fff}
+.quiz-nav{display:flex;justify-content:space-between;gap:12px;margin-top:24px}
+.quiz-nav .btn{padding:12px 26px;font-size:13px}
+.quiz-foot{text-align:center;font-size:11px;color:var(--ink-faint);margin-top:18px}
+
+/* ---------- 结果页 ---------- */
+.result-hero{padding:34px 28px 30px;text-align:center;position:relative;overflow:hidden}
+.result-hero:after{
+  content:"";position:absolute;width:220px;height:220px;border-radius:50%;
+  right:-90px;top:-110px;background:radial-gradient(circle,rgba(194,161,92,.2),transparent 70%)
+}
+.result-hero > *{position:relative;z-index:1}
+.result-kicker{font-size:10px;letter-spacing:.3em;color:var(--accent);text-transform:uppercase}
+.result-type{font-family:var(--serif);font-size:clamp(31px,8.5vw,48px);font-weight:600;margin:10px 0 6px;line-height:1.28}
+.result-copy{font-family:var(--serif);font-size:14.5px;color:var(--accent-deep);line-height:1.9;margin:14px auto 0;max-width:440px}
+.result-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:20px}
+.tag{font-size:11px;padding:5px 12px;border-radius:999px;background:rgba(180,100,120,.1);color:var(--accent-deep);border:1px solid var(--accent-soft)}
+.tag.alt{background:rgba(194,161,92,.1);border-color:rgba(194,161,92,.4);color:#8d7133}
+.section{margin-top:18px;padding:26px 28px}
+.section-title{display:flex;align-items:center;gap:12px;margin:0 0 18px;font-family:var(--serif);font-size:17px;font-weight:600}
+.section-title span{font-family:var(--sans);font-size:10px;letter-spacing:.18em;color:var(--accent);font-weight:600}
+.section p{margin:0 0 12px;font-size:13.5px;color:var(--ink-soft);line-height:1.95}
+.section p:last-child{margin-bottom:0}
+.radar-wrap{display:flex;justify-content:center}
+.radar-wrap svg{width:100%;max-width:390px;height:auto;display:block}
+.dim-legend{display:grid;grid-template-columns:repeat(2,1fr);gap:7px 18px;margin-top:14px;font-size:11.5px;color:var(--ink-soft)}
+.dim-legend i{font-style:normal;color:var(--accent);font-weight:600;margin-left:4px}
+.sub-item{border-left:2px solid var(--accent-soft);padding-left:14px;margin-bottom:18px}
+.sub-item:last-child{margin-bottom:0}
+.sub-item h4{font-family:var(--serif);font-size:15px;margin:0 0 5px;font-weight:600}
+.sub-item small{font-size:10.5px;color:var(--ink-faint);letter-spacing:.1em}
+.analysis-item{margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.analysis-item:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+.analysis-item h4{font-family:var(--serif);font-size:14.5px;margin:0 0 7px;color:var(--ink);font-weight:600}
+.analysis-item p{font-size:13px;color:var(--ink-soft);line-height:1.95;margin:0}
+.strength-list{display:flex;flex-wrap:wrap;gap:10px}
+.strength{
+  flex:1 1 220px;border:1px solid var(--line);border-radius:14px;padding:14px 15px;
+  background:rgba(255,255,255,.6)
+}
+.strength b{font-family:var(--serif);font-size:14px;display:block;margin-bottom:5px}
+.strength span{font-size:12px;color:var(--ink-soft);line-height:1.8}
+.egg{background:linear-gradient(135deg,rgba(194,161,92,.13),rgba(180,100,120,.09));border:1px solid rgba(194,161,92,.35)}
+.egg p{font-family:var(--serif);font-size:15px;color:var(--ink);line-height:1.9}
+.share-card{
+  border:1px solid rgba(180,100,120,.35);border-radius:18px;padding:22px;
+  background:
+    radial-gradient(400px 180px at 100% 0,rgba(194,161,92,.16),transparent 65%),
+    linear-gradient(150deg,#fffdfb,#f7efed);
+  box-shadow:0 16px 40px -26px rgba(80,55,60,.5)
+}
+.share-card .sc-kicker{font-size:9.5px;letter-spacing:.26em;color:var(--accent);text-transform:uppercase}
+.share-card .sc-type{font-family:var(--serif);font-size:26px;font-weight:600;margin:8px 0 4px}
+.share-card .sc-sub{font-size:11.5px;color:var(--ink-soft);margin-bottom:14px}
+.share-card .sc-copy{font-family:var(--serif);font-size:13px;line-height:1.85;color:var(--accent-deep);padding-bottom:14px;border-bottom:1px solid var(--line)}
+.sc-scores{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 18px;margin-top:14px}
+.sc-score{font-size:10.5px;color:var(--ink-soft);display:flex;align-items:center;gap:6px}
+.sc-score i{font-style:normal;font-weight:600;color:var(--accent);min-width:24px;text-align:right}
+.share-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.share-actions .btn{padding:11px 22px;font-size:12.5px}
+.result-bottom{display:flex;justify-content:center;margin-top:26px}
+.disclaimer{text-align:center;font-size:11px;color:var(--ink-faint);line-height:1.8;margin-top:20px;padding:0 12px}
+.toast{
+  position:fixed;left:50%;bottom:34px;transform:translate(-50%,20px);
+  background:var(--ink);color:#fff;font-size:12px;padding:10px 20px;border-radius:999px;
+  opacity:0;pointer-events:none;transition:.28s;z-index:99;box-shadow:0 10px 30px -10px rgba(0,0,0,.4)
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ==================== 首页 ==================== -->
+  <section class="screen active" id="screen-home">
+    <div class="paper-card hero">
+      <div class="hero-mark">追</div>
+      <p class="eyebrow">Fan Psychology Test · 2026</p>
+      <h1>测测你究竟是<br><em>什么类型的粉丝</em>？</h1>
+      <p class="sub">18 道生活情境题，不贴标签，只拆解你追星背后的真实心理结构。<br>你给出的每一个选择，都在描述你与喜欢之间那套独特的相处方式。</p>
+      <div class="rule" style="margin-left:auto;margin-right:auto"></div>
+      <div class="home-actions"><button class="btn btn-primary" id="btn-start">开始测试 →</button></div>
+    </div>
+
+    <div class="paper-card intro">
+      <h2>测试说明</h2>
+      <ul class="intro-grid">
+        <li><b>18 道题</b>六大心理维度，每维度 3 题</li>
+        <li><b>随意多选</b>符合就选，不限数量，也不必勉强</li>
+        <li><b>约 5 分钟</b>凭第一直觉作答最准确</li>
+        <li><b>即时结果</b>主类型 + 副类型 + 深度心理报告</li>
+      </ul>
+      <p class="intro-note">本测试不衡量喜欢程度，也不按消费金额排名。分数只代表你在本次作答中的相对倾向，不构成人格诊断。答案可在答题过程中随时返回修改。</p>
+    </div>
+  </section>
+
+  <!-- ==================== 答题页 ==================== -->
+  <section class="screen" id="screen-quiz">
+    <div class="quiz-top">
+      <div class="quiz-meta"><span>第 <b id="q-num">1</b> / 18 题</span><span id="q-percent">6%</span></div>
+      <div class="progress"><i id="q-bar"></i></div>
+      <span class="dim-tag" id="q-dim">情感投射</span>
+    </div>
+    <div class="paper-card question">
+      <h2 id="q-title"></h2>
+      <p class="q-hint">可多选 · 符合的都选上 · 也可以一个都不选</p>
+      <div class="options" id="q-options"></div>
+    </div>
+    <div class="quiz-nav">
+      <button class="btn btn-ghost" id="btn-prev">← 上一题</button>
+      <button class="btn btn-primary" id="btn-next">下一题 →</button>
+    </div>
+    <div class="quiz-foot">你的选择会被保留，返回上一题可随时修改</div>
+  </section>
+
+  <!-- ==================== 结果页 ==================== -->
+  <section class="screen" id="screen-result">
+    <div class="paper-card result-hero">
+      <div class="result-kicker">Your Fan Profile</div>
+      <h2 class="result-type" id="r-type"></h2>
+      <p class="result-copy" id="r-copy"></p>
+      <div class="result-tags" id="r-tags"></div>
+    </div>
+
+    <div class="paper-card section">
+      <h3 class="section-title"><span>01 / MAP</span>六维度倾向雷达</h3>
+      <div class="radar-wrap" id="r-radar"></div>
+      <div class="dim-legend" id="r-legend"></div>
+      <p style="margin-top:16px;font-size:11.5px;color:var(--ink-faint)">分数为相对倾向值（0–100），由你的选项权重按各维度满分标准化得出，不代表喜欢程度或粉丝等级。</p>
+    </div>
+
+    <div class="paper-card section">
+      <h3 class="section-title"><span>02 / LAYERS</span>主类型与副类型</h3>
+      <div id="r-subtypes"></div>
+    </div>
+
+    <div class="paper-card section">
+      <h3 class="section-title"><span>03 / INSIGHT</span>深度心理分析</h3>
+      <div id="r-analysis"></div>
+    </div>
+
+    <div class="paper-card section">
+      <h3 class="section-title"><span>04 / STRENGTH</span>你可能没注意到的优势</h3>
+      <div class="strength-list" id="r-strengths"></div>
+    </div>
+
+    <div class="paper-card section egg">
+      <h3 class="section-title"><span>05 / EASTER EGG</span>一条小彩蛋</h3>
+      <p id="r-egg"></p>
+    </div>
+
+    <div class="paper-card section">
+      <h3 class="section-title"><span>06 / SHARE</span>分享卡片</h3>
+      <div class="share-card" id="share-card"></div>
+      <div class="share-actions">
+        <button class="btn btn-primary" id="btn-copy">复制分享文案</button>
+        <button class="btn btn-ghost" id="btn-save-tip">截图保存卡片</button>
+      </div>
+    </div>
+
+    <div class="result-bottom"><button class="btn btn-ghost" id="btn-restart">↺ 重新测试</button></div>
+    <p class="disclaimer">当前关注状态为多题综合推测，会随时间和心境变化；它不是标签，只是一张此刻的快照。</p>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- ============================================================
+     核心数据 + 纯计算逻辑（无 DOM 依赖，便于单独修改与测试）
+     ============================================================ -->
+<script id="test-core">
+(function(global){
+'use strict';
+
+/* ---------- 维度定义：每个核心维度 3 道题 ---------- */
+var DIMS = [
+  {key:'D1',name:'情感投射',short:'情感投射',indicators:['FANTASY','ROMANCE','GUARDIAN','COMPANION','EMPATHY']},
+  {key:'D2',name:'欣赏驱动力',short:'欣赏驱动',indicators:['VISUAL','TALENT','WORK','PERSONALITY','GROWTH']},
+  {key:'D3',name:'关注关系',short:'关注关系',indicators:['INDIVIDUAL','GROUP','RELATION','MULTIPLE','DERIVED']},
+  {key:'D4',name:'情感满足与亲近感',short:'亲近满足',indicators:['WORKSAT','VISUALSAT','LIFESAT','INTERACT','EXCLUSIVE','SEEN']},
+  {key:'D5',name:'支持表达',short:'支持表达',indicators:['COLLECT','OFFLINE','COMMERCIAL','BOOST','CREATE','PROMOTE','ARCHIVE']},
+  {key:'D6',name:'情感坚守与喜欢边界',short:'坚守边界',indicators:['LOYAL','WITNESS','HABIT','TOLERANT','PRINCIPLE','UNSUB']}
+];
+
+/* ---------- 指标中文名与解释（用于生成分析报告） ---------- */
+var IND = {
+  FANTASY:{name:'恋爱幻想',desc:'你会在心里为自己和他写出一段只属于两个人的故事，想象是一种很自然的快乐来源。'},
+  ROMANCE:{name:'恋爱认同',desc:'你会把他放在"理想伴侣"的位置上看待，喜欢里带着明确的亲密关系想象。'},
+  GUARDIAN:{name:'守护关怀',desc:'你总能先看到他脆弱的那一面，保护欲和心疼是你情感里很重的部分。'},
+  COMPANION:{name:'陪伴依恋',desc:'他更像一个长期在场的精神陪伴，像老朋友一样被你放进日常。'},
+  EMPATHY:{name:'情感代入',desc:'你很容易把自己的情绪和经历投射到他身上，他的际遇会真实地牵动你。'},
+  VISUAL:{name:'视觉吸引',desc:'直观的美、舞台张力和造型记忆点，往往是你动心的第一入口。'},
+  TALENT:{name:'才华欣赏',desc:'专业能力是你判断"值不值得喜欢"的硬门槛，你对业务水准很敏感。'},
+  WORK:{name:'作品驱动',desc:'真正让你留下来的，是音乐、影视、舞台这些内容本身的质量。'},
+  PERSONALITY:{name:'性格吸引',desc:'谈吐、幽默感和真实感比人设更能打动你，你更在意"他这个人"。'},
+  GROWTH:{name:'成长欣赏',desc:'努力、进步和事业发展轨迹会持续给你正向刺激。'},
+  INDIVIDUAL:{name:'个体关注',desc:'你的注意力高度集中在某一人身上，不太分散。'},
+  GROUP:{name:'团体认同',desc:'你享受的是整体氛围与群像，成员之间的关系本身也是吸引力的一部分。'},
+  RELATION:{name:'关系关注',desc:'两个人或多个人之间的互动细节，是你追星快乐的独立来源。'},
+  MULTIPLE:{name:'多对象关注',desc:'你的喜欢可以有多个落点，不同对象满足你不同的需要。'},
+  DERIVED:{name:'关系衍生',desc:'你喜欢上一个人的路径常常是"因为A认识了B"，这是一种形成方式而非固定身份。'},
+  WORKSAT:{name:'作品满足',desc:'新歌、新剧、新舞台这类专业产出，是你最稳定的满足来源。'},
+  VISUALSAT:{name:'视觉满足',desc:'美照、杂志和造型物料能持续给你直接的愉悦。'},
+  LIFESAT:{name:'生活满足',desc:'Vlog、日常分享和幕后花絮让你感到他离生活很近。'},
+  INTERACT:{name:'互动满足',desc:'直播、评论回复和即时交流是你很看重的环节。'},
+  EXCLUSIVE:{name:'专属满足',desc:'会员福利和专属内容让你产生"更靠近一点"的感觉。'},
+  SEEN:{name:'被看见的满足',desc:'你希望自己的存在被回应，被记住的那一刻会带来很强的成就感。'},
+  COLLECT:{name:'收藏消费',desc:'专辑、小卡和周边对你而言是心意的实体化，值得认真珍藏。'},
+  OFFLINE:{name:'线下体验',desc:'现场的真实感无可替代，你愿意为一次见面安排时间。'},
+  COMMERCIAL:{name:'商业支持',desc:'你会用购买代言产品等方式，为他的商业表现出力。'},
+  BOOST:{name:'应援行动',desc:'打榜、投票、做数据是你的行动语言，你喜欢把支持做成结果。'},
+  CREATE:{name:'创作表达',desc:'剪辑、绘画、写作等二创是你表达喜欢最投入的方式。'},
+  PROMOTE:{name:'传播安利',desc:'把喜欢讲给更多人听，本身就是你快乐的组成部分。'},
+  ARCHIVE:{name:'资料收藏',desc:'整理、保存和分享物料让你有一种参与建构的踏实感。'},
+  LOYAL:{name:'长情坚守',desc:'经历低谷、沉默或评价变化后，你仍然会选择留下。'},
+  WITNESS:{name:'成长见证',desc:'长期陪伴和见证变化，让这份喜欢有了时间沉淀出的厚度。'},
+  HABIT:{name:'习惯依赖',desc:'他已经像固定航线一样嵌进你的日常节奏里。'},
+  TOLERANT:{name:'情感包容',desc:'你能够接纳变化和不完美，不轻易因为单一事件否定一个人。'},
+  PRINCIPLE:{name:'原则底线',desc:'长情不等于无底线，你心里有清晰不可让渡的判断标准。'},
+  UNSUB:{name:'脱粉条件',desc:'存在一些具体变化，会让你的兴趣逐渐消退。'},
+  CHARM:{name:'魅力扩散倾向',desc:'你喜欢看见别人也被他吸引，安利成功本身就很快乐。'},
+  ACHIEVE:{name:'成绩认可倾向',desc:'奖项、排名、热度和纪录会让你感到骄傲。'},
+  ST_DEEP:{name:'深度投入信号',desc:'你在时间、注意力和行动上都有较深的投入。'},
+  ST_CASUAL:{name:'轻度关注信号',desc:'你目前更接近轻松关注的状态。'},
+  ST_INDIFF:{name:'关注淡薄信号',desc:'目前他对你的日常影响比较有限。'},
+  ST_DECLINE:{name:'关注下降信号',desc:'近期有一些让你注意力转移的迹象。'},
+  ST_NEG:{name:'负面感受信号',desc:'作答中出现了一些负面情绪线索。'}
+};
+
+/* ---------- 18 道题：每题 3 题/维度，全部多选，权重即心理映射 ----------
+   修改题目只需改这里：text 是题面，w 中每一项是"指标:权重"。
+   一个选项可影响多个指标，但每个权重都有对应的心理依据。          */
+var QUESTIONS = [
+  /* ===== 维度一 情感投射 ===== */
+  {id:1,dim:'D1',title:'刷到他的一段采访，看到他认真说话的样子，脑海里最先浮现的念头是？',options:[
+    {t:'忍不住开始脑补我们之间的故事，画面还挺具体',w:{FANTASY:3,EMPATHY:1}},
+    {t:'他很像我理想中的伴侣，会想象和他相处的日常',w:{ROMANCE:3,FANTASY:1}},
+    {t:'看他认真又努力的样子有点心疼，想替他挡掉一些压力',w:{GUARDIAN:3,EMPATHY:1}},
+    {t:'他说的话刚好戳中我最近的情绪，像在对我讲',w:{EMPATHY:3,COMPANION:1}},
+    {t:'他已经像老朋友，是我每天固定会想念的人',w:{COMPANION:3,HABIT:1}},
+    {t:'没什么特别念头，就是觉得他挺好看或挺有意思',w:{ST_CASUAL:2}}
+  ]},
+  {id:2,dim:'D1',title:'看到他在节目里被嘉宾开玩笑、明显有点尴尬时，你的反应更接近？',options:[
+    {t:'心里一紧，特别想冲进去替他解围',w:{GUARDIAN:3,EMPATHY:1}},
+    {t:'会心疼，把那一段反复回看',w:{GUARDIAN:2,EMPATHY:2}},
+    {t:'脑补他事后一个人难过，忍不住想安慰他',w:{GUARDIAN:2,FANTASY:1,EMPATHY:2}},
+    {t:'反而觉得这种反差很可爱、很真实',w:{PERSONALITY:2,EMPATHY:1}},
+    {t:'替他有点生气，觉得别人不该这样对他',w:{GUARDIAN:2,PRINCIPLE:1}},
+    {t:'随手刷过去，不会特别放在心上',w:{ST_INDIFF:2,ST_CASUAL:1}}
+  ]},
+  {id:3,dim:'D1',title:'夜深人静时，有没有过把他当作某种情感寄托的时刻？',options:[
+    {t:'会想象我们之间发生一些只属于两个人的情节',w:{FANTASY:3,COMPANION:1}},
+    {t:'会把他当成理想伴侣的模板，代入到自己的生活里',w:{ROMANCE:3,FANTASY:1}},
+    {t:'更多像家人一样，希望他过得好、平平安安',w:{GUARDIAN:2,COMPANION:2}},
+    {t:'心情不好时想想他，就像有个固定的陪伴在身边',w:{COMPANION:3,HABIT:1}},
+    {t:'会把自己的经历和情绪放到他身上，觉得他懂我',w:{EMPATHY:3}},
+    {t:'很少这样，我追星更多是看作品、图个开心',w:{WORK:1,ST_CASUAL:1}}
+  ]},
+
+  /* ===== 维度二 欣赏驱动力 ===== */
+  {id:4,dim:'D2',title:'最开始注意到他，是因为什么？',options:[
+    {t:'一张照片或一段直拍，视觉冲击力太强',w:{VISUAL:3}},
+    {t:'一首歌或一段表演，专业水准让我惊艳',w:{TALENT:3,WORK:1}},
+    {t:'刷到他演的作品，剧情和角色让我入坑',w:{WORK:3}},
+    {t:'性格、谈吐或幽默感特别对我胃口',w:{PERSONALITY:3}},
+    {t:'看到他一路努力走过来，被成长经历打动',w:{GROWTH:3,WITNESS:1}},
+    {t:'朋友安利或热搜把我带进坑',w:{CHARM:1,ST_CASUAL:1}}
+  ]},
+  {id:5,dim:'D2',title:'到现在还在喜欢他，最主要的原因是？',options:[
+    {t:'持续稳定的高质量产出，从没让我失望',w:{WORK:3,WORKSAT:2}},
+    {t:'业务能力一直在进步，每次出现都有新惊喜',w:{TALENT:2,GROWTH:2}},
+    {t:'他这个人的性格和价值观让我认可',w:{PERSONALITY:3}},
+    {t:'跟着他一路走来，像见证一个熟人变厉害',w:{GROWTH:3,WITNESS:2}},
+    {t:'他越来越好看，造型和时尚资源越来越绝',w:{VISUAL:2,VISUALSAT:2}},
+    {t:'习惯了，他已经变成生活的一部分',w:{HABIT:3,COMPANION:1}}
+  ]},
+  {id:6,dim:'D2',title:'他的哪种状态最容易让你持续被吸引？',options:[
+    {t:'认真聊作品、分享创作过程',w:{WORKSAT:3,WORK:1}},
+    {t:'精修图、杂志大片和好看的造型',w:{VISUALSAT:3,VISUAL:1}},
+    {t:'Vlog、日常和幕后花絮，像看朋友的生活',w:{LIFESAT:3}},
+    {t:'直播和社交平台上的即时互动',w:{INTERACT:3}},
+    {t:'会员专属内容和粉丝福利',w:{EXCLUSIVE:3}},
+    {t:'只要他出现就好，内容形式其实不太挑',w:{COMPANION:1,ST_DEEP:2}}
+  ]},
+
+  /* ===== 维度三 关注关系 ===== */
+  {id:7,dim:'D3',title:'你的关注列表里，更接近下面哪一种情况？',options:[
+    {t:'主要就是他一个人，其他人只是路过',w:{INDIVIDUAL:3,ST_DEEP:1}},
+    {t:'喜欢整个团体，成员之间的氛围也很吸引我',w:{GROUP:3}},
+    {t:'特别爱看两位或几位成员之间的互动',w:{RELATION:3}},
+    {t:'同时喜欢好几个艺人或团体，各有各的好',w:{MULTIPLE:3}},
+    {t:'因为看他和其他艺人互动，又开始关注另一个人',w:{DERIVED:3}},
+    {t:'其实没有特别固定关注谁',w:{ST_INDIFF:2,ST_CASUAL:1}}
+  ]},
+  {id:8,dim:'D3',title:'如果因为他，你注意到一位新人，你通常会？',options:[
+    {t:'会去了解，但心里还是把他放在第一位',w:{INDIVIDUAL:2,ST_DEEP:1}},
+    {t:'很自然地把新人也加进我的喜欢列表',w:{MULTIPLE:3,DERIVED:1}},
+    {t:'因为和他互动才关注，互动少了可能也就淡了',w:{DERIVED:3}},
+    {t:'我更在意他所在团体的整体发展',w:{GROUP:3}},
+    {t:'我主要看他们之间的关系，不太关注单人',w:{RELATION:3}},
+    {t:'不太会因此去关注别人',w:{INDIVIDUAL:1}}
+  ]},
+  {id:9,dim:'D3',title:'提到"他和某某的关系"，你的第一反应是？',options:[
+    {t:'会看互动细节，关系本身就是我快乐的来源',w:{RELATION:3}},
+    {t:'会因为这种互动，对另一方也产生好感',w:{DERIVED:3}},
+    {t:'更关心这段关系对他形象或事业的影响',w:{GROUP:1,ACHIEVE:1}},
+    {t:'更在意他一个人的内容，关系只是加分项',w:{INDIVIDUAL:3}},
+    {t:'我喜欢的是整个团的群像，不只看某一对',w:{GROUP:3}},
+    {t:'不太关注这类话题',w:{ST_CASUAL:1}}
+  ]},
+
+  /* ===== 维度四 情感满足与亲近感 ===== */
+  {id:10,dim:'D4',title:'他发布新内容时，你最期待打开的是？',options:[
+    {t:'新歌、新剧、新舞台这类专业产出',w:{WORKSAT:3,WORK:1}},
+    {t:'新拍的美照、杂志和造型',w:{VISUALSAT:3}},
+    {t:'Vlog、日常碎片和幕后',w:{LIFESAT:3}},
+    {t:'直播，希望有机会被他看到或回应',w:{INTERACT:2,SEEN:2}},
+    {t:'会员或专属内容，感觉更靠近他一点',w:{EXCLUSIVE:3,SEEN:1}},
+    {t:'不一定看，知道他还在活动就安心',w:{COMPANION:1,ST_DEEP:1}}
+  ]},
+  {id:11,dim:'D4',title:'如果他开一场直播，你最期待发生的只有一件事，会是？',options:[
+    {t:'认真聊作品、分享创作过程',w:{WORKSAT:2,WORK:1}},
+    {t:'随机展现生活里真实的一面',w:{LIFESAT:3,PERSONALITY:1}},
+    {t:'读评论、回答问题，哪怕只是被念到 ID',w:{SEEN:3,INTERACT:2}},
+    {t:'和嘉宾或成员的互动很好笑',w:{RELATION:1,LIFESAT:1,INTERACT:1}},
+    {t:'抽选粉丝连麦或翻牌',w:{SEEN:3,EXCLUSIVE:1}},
+    {t:'只要能看到他、听到他说话就满足了',w:{COMPANION:2,VISUALSAT:1}}
+  ]},
+  {id:12,dim:'D4',title:'关于"被他看见"，你的真实想法更接近？',options:[
+    {t:'很希望他记住我，哪怕一次回应就会开心很久',w:{SEEN:3,INTERACT:1}},
+    {t:'希望有专属互动机会或会员福利',w:{EXCLUSIVE:3}},
+    {t:'更享受和同好一起交流喜欢他的心情',w:{CHARM:1,PROMOTE:1}},
+    {t:'我更想安静看作品和物料，不太需要回应',w:{WORKSAT:2,ST_CASUAL:1}},
+    {t:'被看见是惊喜，但不影响我继续喜欢',w:{SEEN:1,LOYAL:1}},
+    {t:'比起这些，我更在意他本人过得好不好',w:{GUARDIAN:2,COMPANION:1}}
+  ]},
+
+  /* ===== 维度五 支持表达 ===== */
+  {id:13,dim:'D5',title:'为喜欢的人，你实际做过下面哪些事？',options:[
+    {t:'买专辑、小卡、周边，认真收藏',w:{COLLECT:3,ST_DEEP:1}},
+    {t:'去演唱会、见面会或线下活动',w:{OFFLINE:3,ST_DEEP:1}},
+    {t:'买他代言的产品，支持商业活动',w:{COMMERCIAL:3}},
+    {t:'打榜、投票、做数据、参与应援',w:{BOOST:3,ACHIEVE:1}},
+    {t:'剪视频、画画、写文、做图等二创',w:{CREATE:3}},
+    {t:'整理物料、建文档、持续安利给朋友',w:{ARCHIVE:2,PROMOTE:2}},
+    {t:'目前 mostly 看看，还没做过这些',w:{ST_CASUAL:2}}
+  ]},
+  {id:14,dim:'D5',title:'如果只能选一种方式支持他，你更愿意？',options:[
+    {t:'买实体专辑和周边，把喜欢握在手里',w:{COLLECT:3}},
+    {t:'到现场去，亲眼看一次',w:{OFFLINE:3}},
+    {t:'把他的作品和好消息安利给更多人',w:{PROMOTE:3,CHARM:2}},
+    {t:'做一份用心的二创作品',w:{CREATE:3}},
+    {t:'认真做数据，帮他在榜单上更好看',w:{BOOST:3,ACHIEVE:2}},
+    {t:'长期稳定地关注，就是我的支持方式',w:{LOYAL:2,ST_DEEP:1}}
+  ]},
+  {id:15,dim:'D5',title:'你希望自己的支持最终带来什么？',options:[
+    {t:'他能被更多人看见，魅力被认可',w:{CHARM:3,PROMOTE:1}},
+    {t:'他的作品和数据成绩更好',w:{ACHIEVE:2,WORK:1}},
+    {t:'他拿到更多好资源和好作品',w:{WORK:2,GROWTH:1}},
+    {t:'我能离他更近一点，有互动的机会',w:{SEEN:2,EXCLUSIVE:2}},
+    {t:'只是单纯表达心意，并不求回应',w:{COMPANION:2,LOYAL:1}},
+    {t:'希望他过得开心、不被伤害',w:{GUARDIAN:2}}
+  ]},
+
+  /* ===== 维度六 情感坚守与喜欢边界 ===== */
+  {id:16,dim:'D6',title:'他很久没有更新，或进入低谷期，你会？',options:[
+    {t:'会继续等，相信他会回来',w:{LOYAL:3,TOLERANT:1}},
+    {t:'趁这段时间回头补作品、考古',w:{LOYAL:2,WORKSAT:1}},
+    {t:'有点失落，注意力慢慢转向别处',w:{ST_DECLINE:3}},
+    {t:'只要他还在就好，不更新也没关系',w:{COMPANION:2,TOLERANT:2}},
+    {t:'会去了解发生了什么，尽量理解',w:{EMPATHY:2,TOLERANT:2}},
+    {t:'会觉得"不过如此"，开始脱粉',w:{ST_DECLINE:2,ST_NEG:1}}
+  ]},
+  {id:17,dim:'D6',title:'面对外界争议或他的不完美，你更接近？',options:[
+    {t:'只要不是原则问题，我基本都能接受',w:{TOLERANT:3}},
+    {t:'会看具体情况，我心里有明确的底线',w:{PRINCIPLE:3,TOLERANT:1}},
+    {t:'会努力理解他的处境，愿意替他说话',w:{EMPATHY:2,GUARDIAN:2,TOLERANT:1}},
+    {t:'如果是我无法认同的事，我会慢慢淡出',w:{PRINCIPLE:2,ST_DECLINE:2}},
+    {t:'我不太在意争议，只看作品',w:{WORK:2,TOLERANT:1}},
+    {t:'会因为他喜欢的形象受影响而不开心',w:{ACHIEVE:1,VISUAL:1,ST_NEG:1}}
+  ]},
+  {id:18,dim:'D6',title:'什么情况最可能让你慢慢失去兴趣？',options:[
+    {t:'作品质量明显下降，长期没有产出',w:{UNSUB:3,WORKSAT:1,ST_DECLINE:2}},
+    {t:'触碰了我不能接受的原则底线',w:{PRINCIPLE:3,UNSUB:2}},
+    {t:'变化太大，不再是当初吸引我的样子',w:{UNSUB:2,ST_DECLINE:1}},
+    {t:'我自己的生活重心变了，自然就淡了',w:{ST_DECLINE:2,HABIT:1}},
+    {t:'很难失去兴趣，他就是我生活的一部分',w:{LOYAL:3,HABIT:2,ST_DEEP:2}},
+    {t:'只要他还在，其他我都能调整',w:{TOLERANT:3,LOYAL:2,ST_DEEP:1}}
+  ]}
+];
+
+/* ---------- 候选类型：分数函数基于标准化后的指标分（0–100） ---------- */
+var TYPES = [
+  {id:'love',name:'恋爱投射型',copy:'你追的不只是一个人，还有一场只在心里上演的盛大相遇。',
+   intro:'你在心里和他建立了一段相当具体的亲密关系。幻想与代入不是逃避，而是你感受喜欢最直接的语言。',
+   score:function(i){return .5*i.FANTASY+.5*i.ROMANCE;}},
+  {id:'guard',name:'守护关怀型',copy:'别人看见他的光，你总能看见光后面那个需要被好好对待的人。',
+   intro:'你的喜欢带着温度：心疼、保护和替他委屈，往往比"他有多厉害"更先触动你。',
+   score:function(i){return .7*i.GUARDIAN+.3*i.EMPATHY;}},
+  {id:'close',name:'高浓度陪伴型',copy:'他把你的日常，变成了一条温柔又固定的航线。',
+   intro:'他更像是长期在场的陪伴者。你喜欢的不只是内容，更是"他一直在"这件事本身带来的安定感。',
+   score:function(i){return .5*i.COMPANION+.3*i.HABIT+.2*i.INDIVIDUAL;}},
+  {id:'visual',name:'视觉欣赏型',copy:'你恰好看懂了他最好的样子，也把审美养成了一种本能。',
+   intro:'你对美、造型和舞台张力非常敏锐，视觉记忆点总是先于作品进入你的心里。',
+   score:function(i){return .6*i.VISUAL+.4*i.VISUALSAT;}},
+  {id:'work',name:'作品驱动型',copy:'真正让你留下来的，从来都是作品本身。',
+   intro:'内容质量是你最稳定的锚点。热度会退，话题会过时，但好作品会一直替他说话。',
+   score:function(i){return .6*i.WORK+.4*i.WORKSAT;}},
+  {id:'talent',name:'才华欣赏型',copy:'你听得懂他的厉害，也懂得为专业认真鼓一次掌。',
+   intro:'业务能力是你的硬门槛。你欣赏的是训练和完成度，而不是被包装出来的完美。',
+   score:function(i){return .7*i.TALENT+.3*i.GROWTH;}},
+  {id:'persona',name:'性格共鸣型',copy:'吸引你的不是人设，是他说话时那股藏不住的真实劲儿。',
+   intro:'谈吐、幽默和价值观比标签更能打动你。你喜欢的是"他这个人"，而不是被设计过的形象。',
+   score:function(i){return .8*i.PERSONALITY+.2*i.LIFESAT;}},
+  {id:'grow',name:'成长见证型',copy:'你喜欢的不只是现在的他，还有一路走来变得更好的他。',
+   intro:'时间感是你这段喜欢的底色。陪他走过变化，让这份喜欢有了别人难以复制的厚度。',
+   score:function(i){return .45*i.GROWTH+.35*i.WITNESS+.2*i.LOYAL;}},
+  {id:'group',name:'团体认同型',copy:'你爱的不是某一个人，是一群人在一起才成立的那份默契。',
+   intro:'群像、氛围和彼此的陪伴是你真正的快乐来源，单个成员很难替代这种整体感。',
+   score:function(i){return .9*i.GROUP+.1*i.RELATION;}},
+  {id:'relation',name:'关系沉浸型',copy:'他们之间的互动，是你追星快乐最隐秘的开关。',
+   intro:'关系本身就是内容。你享受细节、暗号和默契，也常因此把喜欢延伸到另一个人身上。',
+   score:function(i){return .6*i.RELATION+.4*i.DERIVED;}},
+  {id:'interact',name:'互动亲近型',copy:'你在意的不是站在台前，而是被他轻轻看见的那一秒。',
+   intro:'互动需求在你这里和恋爱幻想是分开的：你要的是被回应、被记住的那份真实感，而不是一段关系想象。',
+   score:function(i){return .45*i.INTERACT+.35*i.SEEN+.2*i.EXCLUSIVE;}},
+  {id:'action',name:'行动支持型',copy:'你很少说爱，但你做的每一件事都在说。',
+   intro:'你的喜欢是会落地的：现场、数据、购买、执行。你享受把心意变成看得见的结果。',
+   score:function(i){return .4*i.BOOST+.3*i.OFFLINE+.3*i.COMMERCIAL;}},
+  {id:'create',name:'创作表达型',copy:'你把喜欢做成了作品，于是它比喜欢本身活得更久。',
+   intro:'剪辑、绘画、写作是你的语言。你不只是接收内容，也在为他生产内容。',
+   score:function(i){return .75*i.CREATE+.25*i.ARCHIVE;}},
+  {id:'charm',name:'魅力传播型',copy:'别人突然"懂了"你喜欢的人，那一刻你比他还开心。',
+   intro:'你在意的是魅力被发现的过程。安利成功、口碑扩散，会成倍放大你的快乐。',
+   score:function(i){return .7*i.CHARM+.3*i.PROMOTE;}},
+  {id:'achieve',name:'成绩关注型',copy:'你爱他的同时，也希望世界承认他的好。',
+   intro:'奖项、排名、热度和纪录给你的是一种"被证明"的满足，它与欣赏魅力并不冲突。',
+   score:function(i){return .85*i.ACHIEVE+.15*i.BOOST;}},
+  {id:'daily',name:'日常沉浸型',copy:'你把他放进了生活的褶皱里，安静、长久、刚刚好。',
+   intro:'你的喜欢不喧哗：日常物料、收藏和稳定的关注，构成了细水长流的亲密感。',
+   score:function(i){return .5*i.LIFESAT+.3*i.COLLECT+.2*i.COMPANION;}}
+];
+
+/* ---------- 计算：每个指标按自身满分标准化；维度按该维度全部权重满分标准化 ---------- */
+var MAX_W = (function(){
+  var m={};
+  QUESTIONS.forEach(function(q){q.options.forEach(function(o){
+    Object.keys(o.w).forEach(function(k){m[k]=(m[k]||0)+o.w[k];});
+  });});
+  return m;
+})();
+var IND_DIM = (function(){
+  var m={};
+  DIMS.forEach(function(d){d.indicators.forEach(function(k){m[k]=d.key;});});
+  return m;
+})();
+
+function rawIndicators(answers){
+  var raw={};
+  Object.keys(MAX_W).forEach(function(k){raw[k]=0;});
+  answers.forEach(function(sel,qi){
+    if(!sel||!sel.length)return;
+    var opts=QUESTIONS[qi].options;
+    opts.forEach(function(o,oi){
+      if(sel.indexOf(String.fromCharCode(97+oi))>=0){
+        Object.keys(o.w).forEach(function(k){raw[k]+=o.w[k];});
+      }
+    });
+  });
+  return raw;
+}
+function computeIndicators(answers){
+  var raw=rawIndicators(answers),out={};
+  Object.keys(MAX_W).forEach(function(k){out[k]=MAX_W[k]?Math.round(100*raw[k]/MAX_W[k]):0;});
+  return out;
+}
+function computeDimScores(answers){
+  var raw=rawIndicators(answers),out={};
+  DIMS.forEach(function(d){
+    var r=0,m=0;
+    d.indicators.forEach(function(k){r+=raw[k]||0;m+=MAX_W[k]||0;});
+    out[d.key]=m?Math.round(100*r/m):0;
+  });
+  return out;
+}
+function selectedTexts(answers,qi){
+  var sel=answers[qi]||[],opts=QUESTIONS[qi].options,arr=[];
+  opts.forEach(function(o,oi){if(sel.indexOf(String.fromCharCode(97+oi))>=0)arr.push(o.t);});
+  return arr;
+}
+function topInd(keys,ind,n){
+  return keys.map(function(k){return{key:k,score:ind[k]||0};})
+    .sort(function(a,b){return b.score-a.score;}).slice(0,n);
+}
+function has(answers,qi,oi){
+  return (answers[qi]||[]).indexOf(String.fromCharCode(97+oi))>=0;
+}
+
+/* ---------- 关注状态：多题信号综合，非单一题目判断 ---------- */
+function computeStatus(ind){
+  var s={deep:ind.ST_DEEP||0,casual:ind.ST_CASUAL||0,indiff:ind.ST_INDIFF||0,decline:ind.ST_DECLINE||0,neg:ind.ST_NEG||0};
+  var label,note;
+  /* 信号必须"明显压过"投入信号才判为负向；互相矛盾时不做武断判断 */
+  if(s.neg>=38 && s.neg>s.deep+8){
+    label='路黑 / 负面倾向';note='作答中负面线索较明显，也许你正在经历一段不太愉快的追星阶段。';
+  }else if(s.decline>=40 && s.decline>s.deep+8){
+    label='关注下降';note='近期有一些注意力在转移的迹象，这份喜欢可能正在慢慢降温。';
+  }else if(s.indiff>=40 && s.indiff>s.deep+8 && s.indiff>s.casual+8){
+    label='路人无感';note='目前他对你的日常影响有限，更像一个偶尔出现在视野里的人。';
+  }else if(s.deep>=50 && s.casual>=50){
+    label='信号混杂 · 待观察';note='你的答案里同时出现深度投入与轻松关注的线索，当前状态更像处在过渡期，难以归为固定一档。';
+  }else if(s.deep>=50 && s.deep>s.casual+8 && s.deep>s.decline+8){
+    label='深度粉丝';note='你在注意力和行动上都有较深的投入，这段喜欢已经进入了日常结构。';
+  }else if(s.casual>=38 && s.casual>s.deep+8){
+    label='路好';note='你对他有好感、愿意看看，但还没有到全方位投入的程度。';
+  }else if(s.deep>=50){
+    label='深度粉丝';note='你在注意力和行动上都有较深的投入，这段喜欢已经进入了日常结构。';
+  }else{
+    label='普通粉丝';note='你处在一种自然、稳定的关注状态，既不过度卷入也没有疏离。';
+  }
+  return {label:label,note:note,signals:s};
+}
+
+/* ---------- 深度分析：结合具体题目的实际选项 + 指标分 ---------- */
+function buildAnalysis(answers,ind){
+  var A=[];
+  var q4=selectedTexts(answers,3),q5=selectedTexts(answers,4),
+      q10=selectedTexts(answers,9),q11=selectedTexts(answers,10),
+      q13=selectedTexts(answers,12),q16=selectedTexts(answers,15),
+      q3=selectedTexts(answers,2),q18=selectedTexts(answers,17);
+  var d2=topInd(['VISUAL','TALENT','WORK','PERSONALITY','GROWTH'],ind,2);
+  var d4=topInd(['WORKSAT','VISUALSAT','LIFESAT','INTERACT','EXCLUSIVE','SEEN'],ind,2);
+  var d5=topInd(['COLLECT','OFFLINE','COMMERCIAL','BOOST','CREATE','PROMOTE','ARCHIVE'],ind,2);
+  var d1=topInd(['FANTASY','ROMANCE','GUARDIAN','COMPANION','EMPATHY'],ind,2);
+
+  A.push({q:'你通常为什么会喜欢上一个艺人？',a:
+    '最初吸引你的是'+(q4.length?q4.join('、'):'一些说不清的眼缘')+'。从整体作答看，'+
+    IND[d2[0].key].name+'（'+d2[0].score+'）和'+IND[d2[1].key].name+'（'+d2[1].score+'）构成了你的主要入口。'+
+    IND[d2[0].key].desc});
+  A.push({q:'什么特质最容易持续吸引你？',a:
+    '让你留下来的理由是'+(q5.length?q5.join('、'):'一种难以概括的合拍感')+'。'+
+    '这说明你的喜欢并不只靠最初的惊艳，'+
+    (ind.GROWTH>=50?'成长轨迹和进步幅度对你有明显的加权作用。':'稳定输出和"他本人的样子"更能维持你的兴趣。')});
+  A.push({q:'你希望从追星中获得什么？',a:
+    '在内容期待上，你最看重'+(q10.length?q10.join('、'):'陪伴感本身')+'；直播里你在意的是'+
+    (q11.length?q11.join('、'):'能看到他就足够')+'。'+
+    IND[d4[0].key].name+'（'+d4[0].score+'）与'+IND[d4[1].key].name+'（'+d4[1].score+'）是你最主要的满足通道。'+
+    (ind.SEEN>=55?'想被看见的需求在你身上比较明确，但它和恋爱幻想是两件事。':'')});
+  A.push({q:'你通常如何表达自己的喜欢？',a:
+    '你实际做过或愿意做的是'+(q13.length?q13.join('、'):'暂时以观看为主')+'。'+
+    '你的表达集中在'+IND[d5[0].key].name+'（'+d5[0].score+'）和'+IND[d5[1].key].name+'（'+d5[1].score+'）。'+
+    '值得注意的是，你的支持方式与投入金额并不等价，时间和心思在你的答案里同样清晰。'});
+  A.push({q:'你是否容易受营业、作品和外界环境影响？',a:
+    '在低谷情境里，你倾向于'+(q16.length?q16.join('、'):'保持观望')+'。'+
+    (ind.HABIT>=55?'他已经较深地嵌入你的日常节奏，环境变化会带来明显波动。':'你对环境变化的敏感度属于中等水平，不会因为单一事件立刻改变态度。')+
+    (ind.ACHIEVE>=55?'外界成绩与评价对你有一定影响，你会因为"被认可"而更开心。':'外界的排名和评价不是你的主要判断依据。')+
+    (ind.TOLERANT>=55?'同时，你的情感包容度较高，能容纳变化和不完美。':'你对变化有自己的筛选标准。')});
+  A.push({q:'你对艺人的情感属于哪种模式？',a:
+    '深夜独处时，你的选择是'+(q3.length?q3.join('、'):'很少做情感投射')+'。'+
+    '主导你的是'+IND[d1[0].key].name+'（'+d1[0].score+'），其次是'+IND[d1[1].key].name+'（'+d1[1].score+'）。'+
+    IND[d1[0].key].desc+
+    (ind.FANTASY>=50&&ind.ROMANCE>=50?'幻想与恋爱认同在你身上同时存在，它们可以并行，不必混为一谈。':'')});
+  A.push({q:'你最容易在哪些情况下失去兴趣？',a:
+    '你提到的脱粉条件是'+(q18.length?q18.join('、'):'目前没有明确阈值')+'。'+
+    (ind.UNSUB>=55?'这说明你有相当具体的边界，不是凭感觉离开。':'你的离开更像一个缓慢过程，而不是某个瞬间的决定。')+
+    (ind.PRINCIPLE>=55?'原则底线在你心里很清晰：长情，但不代表没有底线。':'')+
+    (ind.LOYAL>=55?'不过你的长情倾向也很强，通常要跨过好几道门槛才会真的转身。':'')});
+  var unique;
+  if(ind.DERIVED>=55&&ind.MULTIPLE>=55){
+    unique='你有一种"墙头迁移体质"：一次同框就可能改写你的关注列表，但这份喜欢是真实发生过的，不必据此怀疑自己不够长情。';
+  }else if(ind.CREATE>=55){
+    unique='你不满足于做观众。你的喜欢有输出端，这让你在这段关系里同时拥有参与者和创作者的身份。';
+  }else if(ind.SEEN>=60&&ind.FANTASY<35){
+    unique='你并不想和他发生什么故事，你只是想被翻一次牌。这种"只求被看见、不求关系"的状态非常清醒。';
+  }else if(ind.GROUP>=55&&ind.RELATION>=55){
+    unique='你追的是一整片星群：既看整体氛围，也看细部互动，两者对你来说并不矛盾。';
+  }else if(ind.COLLECT>=55&&ind.ARCHIVE>=50){
+    unique='你有一种档案式的浪漫：把喜欢整理成可以保存、可以翻阅的东西，时间越久越有价值。';
+  }else if(ind.WORK>=55&&ind.ACHIEVE<35){
+    unique='你在意的是作品本身，而不是它换来了什么名次。这种判断方式在热闹的粉圈里其实挺难得。';
+  }else{
+    unique='你的追星方式很难被一个标签概括：'+
+      topInd(['FANTASY','GUARDIAN','COMPANION','WORK','RELATION','BOOST','CREATE'],ind,2)
+        .map(function(x){return IND[x.key].name+'（'+x.score+'）';}).join('与')+
+      '同时存在，组合出了只属于你的节奏。';
+  }
+  A.push({q:'你的追星方式有哪些独特之处？',a:unique});
+  return A;
+}
+
+/* ---------- 隐藏优势：有分数依据，不空泛吹捧 ---------- */
+function buildStrengths(ind){
+  var pool=[
+    {k:'LOYAL',t:'长情与定力',s:50,d:'你能在没有掌声的阶段继续记得一个人，这种持续投入的能力并不常见。'},
+    {k:'WITNESS',t:'见证与耐心',s:50,d:'你愿意把时间交给一段慢慢展开的过程，因而能看见别人忽略的变化。'},
+    {k:'WORK',t:'发现价值的眼睛',s:55,d:'你判断依据是作品质量，不容易被噱头带着走。'},
+    {k:'CREATE',t:'创作与表达',s:45,d:'你把感受转化成了可以被看见的作品，这是很实在的创造力。'},
+    {k:'PROMOTE',t:'传播与表达力',s:50,d:'你能把喜欢讲得让别人听懂，这份表达能力在任何场景都好用。'},
+    {k:'EMPATHY',t:'共情敏感度',s:55,d:'你对他人处境的感知很细，这份温柔通常不只留给喜欢的人。'},
+    {k:'BOOST',t:'组织与执行',s:50,d:'你擅长把想法落成行动，数据、投票和应援都需要持续的准备。'},
+    {k:'VISUAL',t:'审美敏锐度',s:60,d:'你对美和专业的判断很敏锐，能快速抓住真正的记忆点。'},
+    {k:'TOLERANT',t:'情绪弹性',s:60,d:'你能容纳不完美，这让你在这段关系里不容易被单一事件耗尽。'}
+  ];
+  var hit=pool.filter(function(p){return (ind[p.k]||0)>=p.s;})
+    .sort(function(a,b){return (ind[b.k]||0)-(ind[a.k]||0);});
+  /* 低分作答也要给出有依据的反馈：从实际得分最高的指标出发，不虚构优势 */
+  if(hit.length<3){
+    var keys=Object.keys(IND).filter(function(k){return k.indexOf('ST_')!==0;});
+    var top=keys.map(function(k){return{k:k,v:ind[k]||0};})
+      .sort(function(a,b){return b.v-a.v;}).slice(0,3);
+    top.forEach(function(x){
+      if(hit.length>=3)return;
+      var already=hit.some(function(p){return p.k===x.k;});
+      if(already)return;
+      hit.push({k:x.k,t:IND[x.k].name+'的觉醒',s:0,
+        d:'你在「'+IND[x.k].name+'」上给出了自己的选择（'+x.v+'）。即使这一项还不是你的高分项，它也是你这次作答里最清晰的线索之一。'});
+    });
+    hit.sort(function(a,b){return (ind[b.k]||0)-(ind[a.k]||0);});
+  }
+  return hit.slice(0,4).map(function(p){return{title:p.t,text:p.d,score:ind[p.k]||0};});
+}
+
+/* ---------- 彩蛋：基于具体答案组合 ---------- */
+function buildEgg(ind){
+  if(ind.MULTIPLE>=55&&ind.DERIVED>=50)return '你的墙头数量，可能已经需要一个专门的日历来管理——而且每一次动心都是真心，这一点没法否认。';
+  if(ind.CREATE>=60)return '以你的产出频率，说不定某天正主会先刷到你的作品，然后困惑地想：这位是不是比我还敬业？';
+  if(ind.ARCHIVE>=60)return '你硬盘里的物料储量，大概能让一个刚入坑的人直接跳过考古期。';
+  if(ind.SEEN>=60&&ind.FANTASY<35)return '你的人生目标非常清晰：不谈恋爱，只求翻牌。清清爽爽，专注得令人敬佩。';
+  if(ind.CHARM>=60)return '别人入坑的那一刻，你比他本人还激动——你大概是粉圈里最成功的"义务宣传委员"。';
+  if(ind.COLLECT>=60)return '你的小卡和专辑排面，说不定比他的行程表还满。';
+  if(ind.GUARDIAN>=60)return '你大概是他全网最操心的那类人，屏幕上皱一次眉，你这边已经递好了纸巾。';
+  if(ind.INTERACT>=60)return '你对直播的贡献主要集中在弹幕区——刷新速度之快，堪称一场个人-speedrun。';
+  return '你在这份测试里的每一次选择都很诚实，这种诚实本身就是一种很可爱的追星方式。';
+}
+
+/* ---------- 汇总 ---------- */
+function computeResult(answers){
+  var ind=computeIndicators(answers),dim=computeDimScores(answers);
+  var totalSelected=answers.reduce(function(n,a){return n+(a?a.length:0);},0);
+  var ranked=TYPES.map(function(t){return{id:t.id,name:t.name,copy:t.copy,intro:t.intro,score:Math.round(t.score(ind))};})
+    .sort(function(a,b){return b.score-a.score;});
+  var main=ranked[0],second=ranked[1],third=ranked[2];
+  var composite=(main.score-second.score)<=5&&totalSelected>0;
+  var status=computeStatus(ind);
+  /* 全部未选时不为随机最高分硬套一个人格标签 */
+  if(totalSelected===0){
+    main={id:'blank',name:'留白型',score:0,
+      copy:'这一次你选择了沉默，画像也安静地留了白。',
+      intro:'18 道题都没有做出选择，因此没有足够信息推断你的心理倾向。这不是失败，只是这次你不想被任何标签描述。'};
+    composite=false;
+    second={name:'暂未显现',intro:'当你愿意多选几项时，这里会出现属于你的副倾向。',score:0};
+    third={name:'暂未显现',intro:'当你愿意多选几项时，这里会出现属于你的副倾向。',score:0};
+  }
+  var shareText=
+    '【测测你究竟是什么类型的粉丝？】\n'+
+    '主类型：'+(composite?main.name+' × '+second.name+' 复合型':main.name)+'\n'+
+    '副类型：'+second.name+' / '+third.name+'\n'+
+    '关注状态：'+status.label+'（倾向推测）\n'+
+    '六维倾向：'+DIMS.map(function(d){return d.short+' '+dim[d.key];}).join(' / ')+'\n'+
+    '专属文案：'+main.copy;
+  return{
+    indicators:ind,dimensions:dim,ranked:ranked,totalSelected:totalSelected,
+    main:{name:composite?main.name+' × '+second.name+' 复合型':main.name,
+          copy:main.copy,intro:composite?(main.intro+' 同时，'+second.intro):main.intro,
+          score:main.score,composite:composite},
+    sub:[second,third],status:status,analysis:buildAnalysis(answers,ind),
+    strengths:buildStrengths(ind),egg:buildEgg(ind),shareText:shareText
+  };
+}
+
+global.FanTestCore={
+  DIMS:DIMS,DIMS_COUNT:DIMS.length,QUESTIONS:QUESTIONS,TYPES:TYPES,IND:IND,
+  MAX_W:MAX_W,computeIndicators:computeIndicators,computeDimScores:computeDimScores,
+  computeResult:computeResult,selectedTexts:selectedTexts
+};
+})(typeof window!=='undefined'?window:globalThis);
+</script>
+
+<!-- ============================================================
+     界面交互逻辑
+     ============================================================ -->
+<script>
+(function(){
+'use strict';
+/* 兜底：任何脚本异常都直接显示在页面上，避免"点了没反应"却无从排查 */
+window.addEventListener('error',function(ev){
+  try{
+    var t=document.getElementById('toast');
+    if(t){t.textContent='脚本异常：'+(ev.message||'未知错误');t.classList.add('show');}
+  }catch(e){}
+});
+var C=window.FanTestCore;
+if(!C){
+  document.body.innerHTML='<div style="padding:40px;font-family:sans-serif;line-height:1.8">'+
+    '页面脚本未能加载，请尝试：① 用 Chrome / Edge 直接打开此 HTML 文件；'+
+    '② 或关闭浏览器节能/省电模式后刷新。</div>';
+  return;
+}
+var TOTAL=C.QUESTIONS.length;
+var answers=[];
+var current=0;
+var latestResult=null;
+function resetAnswers(){answers=[];for(var i=0;i<TOTAL;i++)answers.push([]);}
+resetAnswers();
+
+function $(id){return document.getElementById(id);}
+function show(id){
+  ['screen-home','screen-quiz','screen-result'].forEach(function(s){$(s).classList.toggle('active',s===id);});
+  /* 兼容老 WebView：对象形式与 instant 值在部分容器会抛错 */
+  try{window.scrollTo(0,0);}catch(e){}
+  try{document.documentElement.scrollTop=0;document.body.scrollTop=0;}catch(e){}
+}
+function toast(msg){
+  var t=$('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove('show');},2200);
+}
+
+/* ---------- 渲染题目 ---------- */
+function renderQuestion(){
+  var q=C.QUESTIONS[current];
+  $('q-num').textContent=current+1;
+  var pct=Math.round((current+1)/TOTAL*100);
+  $('q-percent').textContent=pct+'%';
+  $('q-bar').style.width=pct+'%';
+  $('q-dim').textContent=C.DIMS.filter(function(d){return d.key===q.dim;})[0].name;
+  $('q-title').textContent=q.title;
+  var wrap=$('q-options');wrap.innerHTML='';
+  q.options.forEach(function(o,oi){
+    var letter=String.fromCharCode(97+oi);
+    var el=document.createElement('button');
+    el.type='button';el.className='option';
+    el.setAttribute('data-letter',letter);
+    var chosen=(answers[current]||[]).indexOf(letter)>=0;
+    if(chosen)el.classList.add('selected');
+    el.setAttribute('aria-pressed',chosen?'true':'false');
+    var box=document.createElement('span');box.className='box';box.textContent='✓';
+    var txt=document.createElement('span');txt.textContent=o.t;
+    el.appendChild(box);el.appendChild(txt);
+    el.addEventListener('click',function(){
+      var arr=answers[current],idx=arr.indexOf(letter);
+      if(idx>=0){arr.splice(idx,1);el.classList.remove('selected');el.setAttribute('aria-pressed','false');}
+      else{arr.push(letter);el.classList.add('selected');el.setAttribute('aria-pressed','true');}
+    });
+    wrap.appendChild(el);
+  });
+  $('btn-prev').textContent=current===0?'← 返回首页':'← 上一题';
+  $('btn-next').textContent=current===TOTAL-1?'查看分析结果 →':'下一题 →';
+}
+
+/* ---------- 雷达图（纯 SVG 动态生成） ---------- */
+function radarSVG(dim){
+  var cx=200,cy=188,r=124,labelR=r+27,n=C.DIMS.length;
+  function point(i,radius){
+    var a=(-90+i*360/n)*Math.PI/180;
+    return[cx+radius*Math.cos(a),cy+radius*Math.sin(a)];
+  }
+  function poly(radius){
+    return C.DIMS.map(function(_,i){return point(i,radius).join(',');}).join(' ');
+  }
+  var s='<svg viewBox="0 0 400 380" role="img" aria-label="六维度倾向雷达图">';
+  s+='<defs><linearGradient id="radarFill" x1="0" y1="0" x2="1" y2="1">'+
+     '<stop offset="0%" stop-color="#b46478" stop-opacity=".42"/>'+
+     '<stop offset="100%" stop-color="#c2a15c" stop-opacity=".18"/></linearGradient></defs>';
+  [20,40,60,80,100].forEach(function(v){
+    s+='<polygon points="'+poly(r*v/100)+'" fill="none" stroke="rgba(47,42,46,.12)" stroke-width="1"/>';
+  });
+  C.DIMS.forEach(function(d,i){
+    var p=point(i,r);
+    s+='<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'" stroke="rgba(47,42,46,.1)" stroke-width="1"/>';
+  });
+  var dataPts=C.DIMS.map(function(d,i){return point(i,r*(dim[d.key]||0)/100);});
+  s+='<polygon points="'+dataPts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ')+
+     '" fill="url(#radarFill)" stroke="#b46478" stroke-width="2" stroke-linejoin="round"/>';
+  dataPts.forEach(function(p){
+    s+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.6" fill="#fffdfc" stroke="#b46478" stroke-width="2"/>';
+  });
+  C.DIMS.forEach(function(d,i){
+    var lp=point(i,labelR),a=(-90+i*360/n)*Math.PI/180,cos=Math.cos(a);
+    var anchor=cos>.3?'start':(cos<-.3?'end':'middle');
+    s+='<text x="'+lp[0].toFixed(1)+'" y="'+lp[1].toFixed(1)+'" text-anchor="'+anchor+'" '+
+       'dominant-baseline="middle" font-size="12" fill="#6e6269" font-family="PingFang SC,Microsoft YaHei,sans-serif">'+
+       d.short+'</text>';
+    var vp=point(i,labelR+15);
+    s+='<text x="'+vp[0].toFixed(1)+'" y="'+vp[1].toFixed(1)+'" text-anchor="'+anchor+'" '+
+       'dominant-baseline="middle" font-size="11" fill="#b46478" font-weight="600" font-family="PingFang SC,Microsoft YaHei,sans-serif">'+
+       dim[d.key]+'</text>';
+  });
+  s+='</svg>';
+  return s;
+}
+
+/* ---------- 渲染结果 ---------- */
+function renderResult(res){
+  latestResult=res;
+  $('r-type').textContent=res.main.name;
+  $('r-copy').textContent=res.main.copy;
+  $('r-tags').innerHTML='' +
+    '<span class="tag">副倾向 · '+res.sub[0].name+'</span>'+
+    '<span class="tag alt">副倾向 · '+res.sub[1].name+'</span>'+
+    '<span class="tag">关注状态 · '+res.status.label+'</span>';
+  $('r-radar').innerHTML=radarSVG(res.dimensions);
+  $('r-legend').innerHTML=C.DIMS.map(function(d){
+    return '<div>'+d.name+'<i>'+res.dimensions[d.key]+'</i></div>';
+  }).join('');
+  $('r-subtypes').innerHTML=
+    '<div style="border-left:2px solid var(--accent);padding-left:14px;margin-bottom:18px">'+
+      '<h4 style="font-family:var(--serif);font-size:16px;margin:0 0 6px">主类型 · '+res.main.name+' <small style="font-size:11px;color:var(--ink-faint)">'+res.main.score+' 分</small></h4>'+
+      '<p style="font-size:13px;color:var(--ink-soft);line-height:1.95;margin:0">'+res.main.intro+'</p>'+
+    '</div>'+
+    res.sub.map(function(t,idx){
+      return '<div class="sub-item"><h4>副类型 '+(idx+1)+' · '+t.name+'</h4>'+
+        '<small>倾向分 '+t.score+'</small><p style="font-size:12.5px;color:var(--ink-soft);margin:6px 0 0">'+t.intro+
+        '它与你的主类型叠加，让你的画像更立体，而不是互相排斥。</p></div>';
+    }).join('')+
+    '<p style="margin-top:16px;font-size:12px;color:var(--ink-faint)">'+
+    (res.main.composite?'你的前两个倾向分数很接近，因此呈现为复合型。':'主类型由多项指标交叉计算得出，单一选项不会直接决定结果。')+
+    (res.totalSelected<5?' 你本次只选择了 '+res.totalSelected+' 项，样本偏少，结果仅供参考，多选几项会更贴近你。':'')+
+    ' 当前关注状态：'+res.status.label+'——'+res.status.note+'</p>';
+  $('r-analysis').innerHTML=res.analysis.map(function(a,idx){
+    return '<div class="analysis-item"><h4>'+(idx+1)+'. '+a.q+'</h4><p>'+a.a+'</p></div>';
+  }).join('');
+  $('r-strengths').innerHTML=res.strengths.map(function(s){
+    return '<div class="strength"><b>'+s.title+' · '+s.score+'</b><span>'+s.text+'</span></div>';
+  }).join('');
+  $('r-egg').textContent=res.egg;
+  $('share-card').innerHTML=
+    '<div class="sc-kicker">Fan Profile · 2026</div>'+
+    '<div class="sc-type">'+res.main.name+'</div>'+
+    '<div class="sc-sub">副倾向：'+res.sub[0].name+' / '+res.sub[1].name+'　·　'+res.status.label+'</div>'+
+    '<div class="sc-copy">'+res.main.copy+'</div>'+
+    '<div class="sc-scores">'+C.DIMS.map(function(d){
+      return '<div class="sc-score">'+d.short+' <i>'+res.dimensions[d.key]+'</i></div>';
+    }).join('')+'</div>';
+}
+
+/* ---------- 事件绑定 ---------- */
+$('btn-start').addEventListener('click',function(){current=0;renderQuestion();show('screen-quiz');});
+$('btn-next').addEventListener('click',function(){
+  if(current<TOTAL-1){current++;renderQuestion();}
+  else{
+    /* 必须走完全部 18 题才生成结果 */
+    var answered=answers.filter(function(a){return a&&a.length>0;}).length;
+    renderResult(C.computeResult(answers));
+    show('screen-result');
+  }
+});
+$('btn-prev').addEventListener('click',function(){
+  if(current>0){current--;renderQuestion();}
+  else{show('screen-home');}
+});
+$('btn-restart').addEventListener('click',function(){
+  resetAnswers();current=0;latestResult=null;
+  document.querySelectorAll('.option').forEach(function(o){o.classList.remove('selected');});
+  show('screen-home');
+  toast('已清空上一轮答案');
+});
+$('btn-copy').addEventListener('click',function(){
+  var text=latestResult?latestResult.shareText:'';
+  if(navigator.clipboard&&window.isSecureContext){
+    navigator.clipboard.writeText(text).then(function(){toast('分享文案已复制');})
+      .catch(function(){fallbackCopy(text);});
+  }else{fallbackCopy(text);}
+});
+function fallbackCopy(text){
+  var ta=document.createElement('textarea');
+  ta.value=text;ta.setAttribute('readonly','');
+  ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');toast('分享文案已复制');}
+  catch(e){toast('复制失败，请长按选择文字');}
+  document.body.removeChild(ta);
+}
+$('btn-save-tip').addEventListener('click',function(){
+  toast('对上方卡片截图，即可保存分享');
+});
+})();
+</script>
+</body>
+</html>
